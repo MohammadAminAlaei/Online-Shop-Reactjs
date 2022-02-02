@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import rtlPlugin from 'stylis-plugin-rtl';
+import {CacheProvider} from '@emotion/react';
+import createCache from '@emotion/cache';
+import {prefixer} from 'stylis';
+import {ThemeProvider} from '@mui/material/styles';
+import {theme} from './assets/CustomTheme.mui'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// Create rtl cache
+const cacheRtl = createCache({
+    key: 'muirtl',
+    stylisPlugins: [prefixer, rtlPlugin],
+});
+
+function RTL(props) {
+    return <CacheProvider value={cacheRtl}>
+        <ThemeProvider theme={theme}>
+            {props.children}
+        </ThemeProvider>
+    </CacheProvider>;
 }
 
-export default App;
+function App(props) {
+    return (
+        <RTL>
+            {props.children}
+        </RTL>
+
+    );
+}
+
+export {App};

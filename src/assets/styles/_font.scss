@@ -1,0 +1,25 @@
+$font-url: '../../assets/fonts';
+$font: 'Vazir';
+
+
+@font-face {
+  font-family: '#{$font}-Light';
+  src: url('#{$font-url}/#{$font}/#{$font}-Light.eot') format('eot');
+  src: url('#{$font-url}/#{$font}/#{$font}-Light.ttf') format('truetype'),
+  url('#{$font-url}/#{$font}/#{$font}-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: '#{$font}-Regular';
+  src: url('#{$font-url}/#{$font}/#{$font}.eot') format('eot');
+  src: url('#{$font-url}/#{$font}/#{$font}.ttf') format('truetype'),
+  url('#{$font-url}/#{$font}/#{$font}.woff') format('woff');
+}
+
+@font-face {
+  font-family: '#{$font}-Bold';
+  src: url('#{$font-url}/#{$font}/#{$font}-Bold.eot') format('eot');
+  src: url('#{$font-url}/#{$font}/#{$font}-Bold.ttf') format('truetype'),
+  url('#{$font-url}/#{$font}/#{$font}-Bold.woff') format('woff');
+}
+
