@@ -3,8 +3,9 @@ import React from 'react';
 function UserLayout(props) {
     return (
         <div>
-            <h1>User Layout</h1>
-            {props.children}
+            <UserLayout>
+                {props.children}
+            </UserLayout>
         </div>
     );
 }
