@@ -1,0 +1,57 @@
+{
+  "products": [
+    {
+      "firstName": "Maktab 63",
+      "brand": "microsoft",
+      "image": [
+        "65ddd8b1bbce4d8396b62611147fa1d6",
+        "65ddd8b1bbce4d8396b62611147fa1d6"
+      ],
+      "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
+      "price": "1500",
+      "count": 150,
+      "createdAt": 1643373068134,
+      "id": 4,
+      "category": {
+        "id": 14,
+        "name": "Laptop",
+        "icon": "65ddd8b1bbce4d8396b62611147fa1d6"
+      }
+    }
+  ],
+  "category": [
+    {
+      "id": 14,
+      "name": "Laptop",
+      "icon": "65ddd8b1bbce4d8396b62611147fa1d6"
+    },
+    {
+      "id": 16,
+      "name": "Laptop",
+      "icon": null
+    },
+    {
+      "name": "sssss",
+      "createdAt": 1643375019984,
+      "id": 17
+    }
+  ],
+  "users": [
+    {
+      "name": "Jamshid Mashayekhi",
+      "username": "admin",
+      "password": "admin",
+      "role": "admin"
+    }
+  ],
+  "orders": [],
+  "protection": {
+    "products.get": false,
+    "orders.post": true,
+    "upload": true,
+    "products": "admin",
+    "orders": "admin",
+    "users": "admin",
+    "protection": "admin"
+  }
+}

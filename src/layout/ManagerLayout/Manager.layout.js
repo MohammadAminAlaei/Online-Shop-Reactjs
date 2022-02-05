@@ -1,12 +1,12 @@
 import React from 'react';
+import {HeaderManager} from './components/Header/ManagerHeader.component';
 
 function ManagerLayout(props) {
     return (
         <div>
-            <h1>Manager</h1>
-            <div>
+            <HeaderManager>
                 {props.children}
-            </div>
+            </HeaderManager>
         </div>
     );
 }

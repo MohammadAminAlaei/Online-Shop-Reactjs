@@ -1,11 +1,12 @@
 import React from 'react';
+import {HeaderUser} from './components/Header/UserHeader.component';
 
 function UserLayout(props) {
     return (
         <div>
-            <UserLayout>
+            <HeaderUser>
                 {props.children}
-            </UserLayout>
+            </HeaderUser>
         </div>
     );
 }

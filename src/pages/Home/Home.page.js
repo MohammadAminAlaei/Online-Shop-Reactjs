@@ -1,16 +1,10 @@
-import React, {Component} from 'react';
-import {Helmet} from 'react-helmet';
+import React from 'react';
 
-class Home extends Component {
-    render() {
-        return (
-            <>
-                <Helmet>
-                    <title>فروشگاه مکتب | خانه </title>
-                </Helmet>
-            </>
-        );
-    }
+
+export default function Home() {
+    return (
+       <div> i am Home </div>
+    );
 }
 
-export {Home};
+export {Home}
