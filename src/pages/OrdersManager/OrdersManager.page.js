@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 import SelectUnstyled, {selectUnstyledClasses} from '@mui/base/SelectUnstyled';
 import OptionUnstyled, {optionUnstyledClasses} from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
+import Skeleton from '@mui/material/Skeleton';
 
 const StyledButton = styled('button')`
   font-family: IBM Plex Sans, sans-serif;
@@ -224,6 +225,8 @@ const OrdersManage = props => {
 
     const classes = useStyle();
 
+    const skeletonCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
     return (
         <>
             <Helmet>
@@ -260,7 +263,7 @@ const OrdersManage = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {!!data.length && data.map(item => (
+                            {!!data.length ? data.map(item => (
                                 <TableRow hover role="checkbox" tabIndex={-1}>
                                     <TableCell key={item.id}>
                                         <figure style={{'width': '60px', 'height': 'auto'}}>
@@ -278,6 +281,24 @@ const OrdersManage = props => {
                                         <Box sx={{display: 'flex', gap: '10px'}}>
                                             <Button color="warning" variant="contained"> ویرایش </Button>
                                             <Button color="error" variant="contained"> حذف </Button>
+                                        </Box>
+                                    </TableCell>
+                                </TableRow>
+                            )) : skeletonCount.map(item => (
+                                <TableRow hover role="checkbox" tabIndex={-1}>
+                                    <TableCell>
+                                        <Skeleton animation="wave" variant="rect" width={60} height={60}/>
+                                    </TableCell>
+                                    <TableCell key={item.key}>
+                                        <Skeleton animation="wave" variant="rect" width={200}/>
+                                    </TableCell>
+                                    <TableCell key={item.key}>
+                                        <Skeleton animation="wave" variant="rect" width={200}/>
+                                    </TableCell>
+                                    <TableCell key={item.key}>
+                                        <Box sx={{display: 'flex', gap: '10px'}}>
+                                            <Skeleton animation="wave" width={90} height={70}/>
+                                            <Skeleton animation="wave" width={90} height={70}/>
                                         </Box>
                                     </TableCell>
                                 </TableRow>

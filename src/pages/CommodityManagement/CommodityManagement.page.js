@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 import SelectUnstyled, {selectUnstyledClasses} from '@mui/base/SelectUnstyled';
 import OptionUnstyled, {optionUnstyledClasses} from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
+import Skeleton from '@mui/material/Skeleton';
 
 const StyledButton = styled('button')`
   font-family: IBM Plex Sans, sans-serif;
@@ -213,7 +214,7 @@ const CommodityManagement = () => {
 
     // FETCH PRODUCTS
     const fetchProducts = async () => {
-        const {data} = await http.get(`${CUSTOMERS}?&_page=${page}&_limit=10`);
+        const {data} = await http.get(`${CUSTOMERS}?status=${value}`);
         setData(data);
         await http.get(CUSTOMERS).then(res => {
             setNumberOfPages(Math.ceil(res.data.length / 10));
@@ -228,8 +229,7 @@ const CommodityManagement = () => {
         setValue(event.target.value);
     };
 
-    console.log(data);
-
+    const skeletonCount = [1, 2, 3, 4, 5]
 
     return (
         <>
@@ -268,22 +268,39 @@ const CommodityManagement = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {!!data.length && data.filter(item => value === 'doing' ? item.status === 'doing' : item.status === 'done').map(item => (
+                            {!!data.length ? data.map(item => (
                                 <TableRow hover role="checkbox" tabIndex={-1}>
-                                    <TableCell key={item.id}>
+                                    <TableCell sx={{width: '30%'}} key={item.id}>
                                         {item.name}
                                     </TableCell>
-                                    <TableCell key={item.key}>
+                                    <TableCell sx={{width: '20%'}} key={item.key}>
                                         {item.totalAmount}
                                     </TableCell>
-                                    <TableCell key={item.key}>
-                                        {item.date} / {item.brand}
+                                    <TableCell sx={{width: '40%'}} key={item.key}>
+                                        {item.date}
                                     </TableCell>
                                     <TableCell key={item.key}>
                                         <Box sx={{display: 'flex', gap: '10px'}}>
-                                            <Button color="warning" variant="contained"> ویرایش </Button>
-                                            <Button color="error" variant="contained"> حذف </Button>
+                                            <Button color="info" variant="contained"> بررسی سفارش </Button>
                                         </Box>
+                                    </TableCell>
+                                </TableRow>
+                            )) : skeletonCount.map(item => (
+                                <TableRow hover role="checkbox" tabIndex={-1}>
+                                    <TableCell sx={{width: '30%'}}>
+                                        <Skeleton animation="wave" variant="rect" width={120}/>
+                                    </TableCell>
+                                    <TableCell sx={{width: '20%'}} key={item.key}>
+                                        <Skeleton animation="wave" variant="rect"
+                                                  width={50}/>
+                                    </TableCell>
+                                    <TableCell sx={{width: '40%'}} key={item.key}>
+                                        <Skeleton animation="wave" variant="rect"
+                                                  width={50}/>
+                                    </TableCell>
+                                    <TableCell sx={{display: 'flex', gap: '10px'}} key={item.key}>
+                                        <Skeleton animation="wave" variant="rect"
+                                                  width={80}/>
                                     </TableCell>
                                 </TableRow>
                             ))}

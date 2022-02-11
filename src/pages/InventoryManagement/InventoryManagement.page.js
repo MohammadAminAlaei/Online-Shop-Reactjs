@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 import SelectUnstyled, {selectUnstyledClasses} from '@mui/base/SelectUnstyled';
 import OptionUnstyled, {optionUnstyledClasses} from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
+import Skeleton from '@mui/material/Skeleton';
 
 const StyledButton = styled('button')`
   font-family: IBM Plex Sans, sans-serif;
@@ -224,6 +225,7 @@ const InventoriManage = props => {
         });
     };
 
+    const skeletonCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     const classes = useStyle();
 
@@ -263,7 +265,7 @@ const InventoriManage = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {!!data.length && data.map(item => (
+                            {!!data.length ? data.map(item => (
                                 <TableRow hover role="checkbox" tabIndex={-1}>
                                     <TableCell sx={{width: '80%'}} key={item.id}>
                                         {item.brand + ' ' + item.firstName}
@@ -273,6 +275,20 @@ const InventoriManage = props => {
                                     </TableCell>
                                     <TableCell className={classes.changer} key={item.key}>
                                         {item.count}
+                                    </TableCell>
+                                </TableRow>
+                            )) : skeletonCount.map(item => (
+                                <TableRow hover role="checkbox" tabIndex={-1}>
+                                    <TableCell sx={{width: '80%'}}>
+                                        <Skeleton animation="wave" variant="rect" width={300}/>
+                                    </TableCell>
+                                    <TableCell key={item.key}>
+                                        <Skeleton className={classes.changer} animation="wave" variant="rect"
+                                                  width={50}/>
+                                    </TableCell>
+                                    <TableCell key={item.key}>
+                                        <Skeleton className={classes.changer} animation="wave" variant="rect"
+                                                  width={50}/>
                                     </TableCell>
                                 </TableRow>
                             ))}
