@@ -7,12 +7,13 @@ import {DEFAULT_PROPS, PROP_TYPES} from './ProtectedRoute.config';
 
 const TargetPage = ({Component, hasLayout}) => {
 
-    let ROLL = localStorage.getItem('ROLL');
-    ROLL === null ? ROLL = 'USER' : ROLL = localStorage.getItem('ROLL');
+    let IS_LOGGED_IN = localStorage.getItem('IS_LOGGED_IN');
+    IS_LOGGED_IN === null ? localStorage.setItem('IS_LOGGED_IN', 'false') : IS_LOGGED_IN = localStorage.getItem('IS_LOGGED_IN');
 
-    if (ROLL === 'MANAGER') {
-        return <Navigate replace to={PATHS.INVENTORY_MANAGEMENT}/>
+    if (IS_LOGGED_IN === 'true') {
+        return <Navigate replace to={PATHS.COMMODITY_MANAGEMENT}/>
     }
+
 
     return (
         <History onRender={

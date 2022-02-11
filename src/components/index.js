@@ -1,1 +1,1 @@
-export {Header} from './Header/Header.component.js';
+export {AppPagination} from './Pagination/Pagination.component';

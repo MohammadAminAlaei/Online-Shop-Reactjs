@@ -15,7 +15,7 @@ import * as PropTypes from 'prop-types';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import image from 'assets/images/مکتب شریف.jfif';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate, useSearchParams} from 'react-router-dom';
 import {PATHS} from '../../../../configs/routes.config';
 
 
@@ -51,13 +51,14 @@ function ScrollTop(props) {
             <Box
                 onClick={handleClick}
                 role="presentation"
-                sx={{position: 'fixed', bottom: 16, right: 16}}
+                sx={{position: 'fixed', bottom: 16, right: 16, zIndex: 500}}
             >
                 {children}
             </Box>
         </Zoom>
     );
-}
+};
+
 
 const useStyles = makeStyles((theme) => ({
     buttons: {
@@ -66,32 +67,32 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
         [theme.breakpoints.down('sm')]: {
             justifyContent: 'space-evenly'
-        }
+        },
     },
     button: {
-        fontSize: '2rem!important',
+        fontSize: '1.2rem!important',
         color: '#fff!important',
         [theme.breakpoints.down('lg')]: {
-            fontSize: '1.6rem!important'
+            fontSize: '1rem!important'
         },
 
     },
     containerPadding: {
-        padding: '2.2rem 0',
+        padding: '1.2rem 0',
         [theme.breakpoints.down('sm')]: {
             padding: '0'
         }
     },
     title: {
-        fontSize: '4rem!important',
+        fontSize: '2.4rem!important',
         [theme.breakpoints.down('lg')]: {
-            fontSize: '2.8rem!important'
+            fontSize: '2rem!important'
         },
         [theme.breakpoints.down('md')]: {
-            fontSize: '3rem!important'
+            fontSize: '1.8rem!important'
         },
         [theme.breakpoints.down('sm')]: {
-            fontSize: '2.8rem!important',
+            fontSize: '1.4rem!important',
         }
     },
     main_header: {
@@ -128,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
     },
     margin_header: {
         [theme.breakpoints.down('sm')]: {
-            margin: '155px 0!important',
+            margin: '130px 0!important',
         }, [theme.breakpoints.up('sm')]: {
             margin: '115px 0!important',
         }, [theme.breakpoints.up('md')]: {
@@ -138,18 +139,23 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     button_group: {
-        fontSize: '1.6rem!important',
-        padding: '0 4rem!important',
+        fontSize: '1rem!important',
+        padding: '0 2.4rem!important',
         backgroundColor: '#fff !important',
         color: '#000!important',
         '&:hover': {
             backgroundColor: '#c5cae9 !important',
         },
         [theme.breakpoints.down('lg')]: {
-            fontSize: '1.2rem!important'
+            fontSize: '.8rem!important',
+            padding: '0 2rem!important',
+
         },
         [theme.breakpoints.down('md')]: {
             padding: '0 2.4rem!important'
+        },
+        [theme.breakpoints.down('sm')]: {
+            padding: '0 1rem!important',
         },
 
     },
@@ -161,16 +167,27 @@ const useStyles = makeStyles((theme) => ({
 const buttons = [
     {
         label: 'کالاها',
+        path: PATHS.ORDERS_MANAGER,
     }, {
-        label: 'موجودی قیمت ها'
+        label: 'موجودی قیمت ها',
+        path: PATHS.INVENTORY_MANAGEMENT,
     }, {
-        label: 'سفارش ها'
+        label: 'سفارش ها',
+        path: PATHS.COMMODITY_MANAGEMENT,
     },
 ]
 
 function HeaderManager(props) {
+
     const navigate = useNavigate();
+    const location = useLocation()
+
     const classes = useStyles();
+
+    const handleClick = (path) => {
+        navigate(path);
+    }
+
     return (
         <div>
             <AppBar>
@@ -185,7 +202,11 @@ function HeaderManager(props) {
                             <ButtonGroup className={classes.buttons_group} variant="contained"
                                          aria-label="medium secondary button group">
                                 {buttons.map((item, index) => (
-                                    <Button className={classes.button_group} key={index}>
+                                    <Button
+                                        sx={{backgroundColor: (location.pathname === item.path) ? '#c5cae9!important' : '#fff'}}
+                                        onClick={e => handleClick(item.path)}
+                                        className={classes.button_group}
+                                        key={index}>
                                         {item.label}
                                     </Button>
                                 ))}
@@ -205,8 +226,8 @@ function HeaderManager(props) {
                 </Box>
             </Container>
             <ScrollTop {...props}>
-                <Fab color="primary" size="medium" aria-label="scroll back to top">
-                    <KeyboardArrowUpIcon sx={{color: '#fff'}} fontSize="large"/>
+                <Fab sx={{color: '#fff', zIndex: '500'}} color="primary" size="medium" aria-label="scroll back to top">
+                    <KeyboardArrowUpIcon sx={{color: '#fff', zIndex: '500!important'}}/>
                 </Fab>
             </ScrollTop>
         </div>

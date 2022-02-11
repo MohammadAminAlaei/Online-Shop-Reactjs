@@ -8,10 +8,12 @@
     "@mui/icons-material": "^5.3.1",
     "@mui/material": "^5.3.1",
     "@mui/styles": "^5.3.0",
+    "@mui/x-data-grid": "^5.5.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.25.0",
+    "formik": "^2.2.9",
     "jss-rtl": "^0.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -19,6 +21,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "react-toastify": "^8.1.1",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
     "stylis": "^4.0.13",
@@ -53,13 +56,15 @@
   },
   "devDependencies": {
     "@emotion/cache": "^11.7.1",
+    "api": "^4.2.0",
     "concurrently": "^7.0.0",
+    "cors": "^2.8.5",
     "env-cmd": "^10.1.0",
-    "prop-types": "^15.8.1",
-    "sass": "^1.49.1",
     "json-server": "^0.16.3",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
-    "nodemon": "^2.0.7"
+    "prop-types": "^15.8.1",
+    "sass": "^1.49.1",
+    "yup": "^0.32.11"
   }
 }

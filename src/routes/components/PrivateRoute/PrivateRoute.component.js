@@ -7,11 +7,11 @@ import {DEFAULT_PROPS, PROP_TYPES} from './PrivateRoute.config';
 
 const TargetPage = ({Component, hasLayout}) => {
 
-    let ROLL = localStorage.getItem('ROLL');
-    ROLL === null ? ROLL = 'USER' : ROLL = localStorage.getItem('ROLL');
+    let IS_LOGGED_IN = localStorage.getItem('IS_LOGGED_IN');
+    IS_LOGGED_IN === null ? localStorage.setItem('IS_LOGGED_IN', 'false') : IS_LOGGED_IN = localStorage.getItem('IS_LOGGED_IN');
 
-    if (ROLL === 'USER' || ROLL === 'null') {
-        return <Navigate replace to={PATHS.HOME}/>
+    if (IS_LOGGED_IN === 'false') {
+        return <Navigate replace to={PATHS.LOGIN_PANEL_MANAGEMENT}/>
     }
 
     return (

@@ -17,6 +17,8 @@ import image from 'assets/images/مکتب شریف.jfif';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
+import {useNavigate} from 'react-router-dom';
+import {PATHS} from '../../../../configs/routes.config';
 
 
 ScrollTop.propTypes = {children: PropTypes.node};
@@ -69,26 +71,26 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     button: {
-        fontSize: '2rem!important',
+        fontSize: '1.2rem!important',
         color: '#fff!important',
         [theme.breakpoints.down('md')]: {
-            fontSize: '1.6rem!important'
+            fontSize: '1.1rem!important'
         },
 
     },
     containerPadding: {
-        padding: '2.2rem 0',
+        padding: '1.75rem 0',
         [theme.breakpoints.down('sm')]: {
             padding: '1rem 0'
         }
     },
     title: {
-        fontSize: '4rem!important',
+        fontSize: '2.4rem!important',
         [theme.breakpoints.down('md')]: {
-            fontSize: '3rem!important'
+            fontSize: '2rem!important'
         },
         [theme.breakpoints.down('sm')]: {
-            fontSize: '2.8rem!important',
+            fontSize: '1.4rem!important',
         }
     },
     main_header: {
@@ -98,22 +100,24 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
             gap: '1.6rem'
-        }
+        },
     },
     box_header: {
+        gap: '2.4rem',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        gap: '3.2rem',
         [theme.breakpoints.down('sm')]: {
             gap: '1rem',
             justifyContent: 'space-evenly'
         },
     },
     iconSize: {
-        fontSize: '3rem!important',
-        [theme.breakpoints.down('sm')]: {
-            fontSize: '2.4rem!important'
+        fontSize: '2.3rem!important',
+        [theme.breakpoints.down('md')]: {
+            fontSize: '2rem!important'
+        }, [theme.breakpoints.down('sm')]: {
+            fontSize: '1.6rem!important'
         },
     },
     margin_header: {
@@ -126,6 +130,7 @@ const useStyles = makeStyles((theme) => ({
 
 function HeaderUser(props) {
     const classes = useStyles();
+    const navigate = useNavigate();
     return (
         <div>
             <AppBar>
@@ -145,7 +150,8 @@ function HeaderUser(props) {
                                 </Typography>
                             </Box>
                             <Box className={classes.buttons}>
-                                <Button className={classes.button}>مدیریت</Button>
+                                <Button onClick={e => navigate(PATHS.LOGIN_PANEL_MANAGEMENT)}
+                                        className={classes.button}>مدیریت</Button>
                                 <Button startIcon={<Badge color="error" badgeContent={99}>
                                     <ShoppingCartIcon className={classes.iconSize}/> </Badge>}
                                         className={classes.button}
