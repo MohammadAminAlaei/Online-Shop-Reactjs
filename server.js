@@ -2,14 +2,14 @@ const jsonServer = require('json-server');
 const cors = require('cors');
 const server = jsonServer.create();
 const router = jsonServer.router('db.json');
-const middlewares = jsonServer.defaults({ noCors: true });
+const middlewares = jsonServer.defaults({noCors: true});
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const upload = multer({dest: 'uploads/'});
 const jwt = require('jsonwebtoken');
 const AUTH_JWT_SECRET = 'TOP-SECRET';
-const AUTH_JWT_OPTIONS = {expiresIn: 10};
+const AUTH_JWT_OPTIONS = {expiresIn: 100000};
 
 // TODO: vaghti token nis, 200 mide
 // TODO: vaghti token nist, invalid nade (login api)
@@ -84,7 +84,7 @@ server.use(jsonServer.bodyParser);
 const imageFieldUploadMiddleware = upload.single('image');
 
 server.use((req, res, next) => {
-    if ((req.method === 'POST' || req.method === 'PATCH') && req.headers['content-type'] != 'application/json') {
+    if ((req.method === 'POST' || req.method === 'PATCH') && req.headers['content-type'] !== 'application/json') {
         imageFieldUploadMiddleware(req, res, next);
     } else {
         next();
@@ -103,7 +103,7 @@ server.use((req, res, next) => {
         const {mimetype, size, filename} = req.file;
 
         // validate uploaded image
-        if (mimetype != 'image/jpeg') throw new Error('image should be in image/jpeg type');
+        if (mimetype !== 'image/jpeg') throw new Error('image should be in image/jpeg type');
         if (size > 2 * 1024 * 1024) throw new Error('image size should be less than 2MB');
 
         // Replace image field value with the file's path
@@ -130,7 +130,7 @@ server.post([
 ], function (req, res, next) {
     if (req.url === '/auth/login') {
         const {username, password} = req.body;
-        req.user = (DB.users || {}).find(u => u.username == username && u.password == password);
+        req.user = (DB.users || {}).find(u => u.username === username && u.password === password);
         if (!req.user) return res.status(400).send('No user with those credentials!');
     }
     if (req.url === '/auth/refresh-token') {

@@ -8,16 +8,29 @@
             name="description"
             content="Web site created using create-react-app"
     />
-    <link rel="icon" href="مکتب%20شریف.jfif" />
-    <meta name="description" content="فروشگاه زنجیره ای مکتب با انواع کالا های دیجیتالی با بهترین کیفیت با امکان ارسال در سرار کشور.">
-    <meta property="og:title" content="فروشگاه زنجیره ای مکتب" />
-    <meta property="og:type" content="website" />
-<!--    <meta property="og:url" content="https://www.maktab.co" />-->
+    <link rel="icon" href="مکتب%20شریف.jfif"/>
+    <meta name="description"
+          content="فروشگاه زنجیره ای مکتب با انواع کالا های دیجیتالی با بهترین کیفیت با امکان ارسال در سرار کشور.">
+    <meta property="og:title" content="فروشگاه زنجیره ای مکتب"/>
+    <meta property="og:type" content="website"/>
+    <!--    <meta property="og:url" content="https://www.maktab.co" />-->
     <!--    <meta property="og:image" content="https://www.maktab.co/images/logo.png" />-->
     <title>فروشگاه مکتب</title>
 </head>
 <body dir="rtl">
 <noscript>You need to enable JavaScript to run this app.</noscript>
+<script>
+    function toFarsiNumber(n) {
+        const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+        return n
+            .toString()
+            .replace(/\d/g, x => farsiDigits[x]);
+    }
+
+    toFarsiNumber(document.body)
+</script>
 <div id="root"></div>
+
 </body>
 </html>

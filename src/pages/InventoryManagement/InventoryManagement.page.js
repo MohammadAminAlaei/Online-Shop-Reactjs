@@ -20,7 +20,7 @@ import axios from 'axios';
 import http from 'services/http.service';
 import {styled} from '@mui/material/styles';
 import {tableCellClasses} from '@mui/material/TableCell';
-import {AppPagination} from 'components';
+import {AppPagination, InputChanger} from 'components';
 import {PRODUCTS} from '../../configs/url.config';
 import PropTypes from 'prop-types';
 import SelectUnstyled, {selectUnstyledClasses} from '@mui/base/SelectUnstyled';
@@ -184,6 +184,7 @@ const useStyle = makeStyles(theme => ({
         color: '#3b54b0de!important',
         cursor: 'pointer',
         fontFamily: 'Vazir-Bold!important',
+        height: '30px'
     }
 }));
 
@@ -209,12 +210,16 @@ const InventoriManage = props => {
     const [page, setPage] = useState(1);
     const [numberOfPages, setNumberOfPages] = useState(10);
     const [value, setValue] = React.useState('');
+    const [displayInputPrice, setDisplayInputPrice] = useState([])
+    const [displayInputCount, setDisplayInputCount] = useState([])
+    const [displayButton, setDisplayButton] = useState('false')
+    const [changePrice_Count, setChangePrice_Count] = useState([])
 
 
     useEffect(() => {
         fetchProducts();
 
-    }, [page, value]);
+    }, [page, value, displayButton]);
 
     // FETCH PRODUCTS
     const fetchProducts = async () => {
@@ -225,9 +230,36 @@ const InventoriManage = props => {
         });
     };
 
+    const handlePrice_Count = (e, type, id) => {
+        setDisplayButton('true')
+        if (type === 'price') {
+            setDisplayInputPrice([...displayInputPrice, id])
+        } else {
+            setDisplayInputCount([...displayInputCount, id])
+        }
+    }
+
+    const handleSave = e => {
+
+        changePrice_Count.forEach(item => {
+
+            http.patch(`http://localhost:3002/products/${2}`, {
+                count: 10
+            }).then(res => {
+                console.log(res)
+                setDisplayButton('false')
+                setDisplayInputPrice([])
+                setDisplayInputCount([])
+            })
+        })
+
+    }
+
     const skeletonCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     const classes = useStyle();
+
+    console.log(changePrice_Count)
 
     return (
         <>
@@ -245,7 +277,9 @@ const InventoriManage = props => {
                         <StyledOption value="">جدیدترین محصولات</StyledOption>
                     </CustomSelect>
                 </div>
-                <Button disabled={true} className={classes.button} color="success" variant="contained">ذخیره</Button>
+                <Button disabled={displayButton === 'false'} className={classes.button} onClick={handleSave}
+                        color="success"
+                        variant="contained">ذخیره</Button>
             </Box>
             <Paper sx={{width: '100%', overflow: 'hidden'}}>
                 <TableContainer>
@@ -266,27 +300,52 @@ const InventoriManage = props => {
                         </TableHead>
                         <TableBody>
                             {!!data.length ? data.map(item => (
-                                <TableRow hover role="checkbox" tabIndex={-1}>
-                                    <TableCell sx={{width: '80%'}} key={item.id}>
+                                <TableRow key={item.id} hover role="checkbox" tabIndex={-1}>
+                                    <TableCell sx={{width: '80%'}}>
                                         {item.brand + ' ' + item.firstName}
                                     </TableCell>
-                                    <TableCell className={classes.changer} key={item.key}>
-                                        {+item.price.toLocaleString('Fa-IR')}
+
+                                    <TableCell onClick={e => handlePrice_Count(e, 'price', item.id)}
+                                               className={classes.changer}>
+                                        <span
+                                            style={{
+                                                display: !!displayInputPrice.length && displayInputPrice.includes(item.id) ? 'none' : 'block',
+                                                fontFamily: 'Vazir-bold'
+                                            }}> {item.price} </span>
+                                        <InputChanger type="number"
+                                                      style={{display: !!displayInputPrice.length && displayInputPrice.includes(item.id) ? 'block' : 'none'}}
+                                                      placeholder={item.price}
+                                                      onBlur={e => setChangePrice_Count([...changePrice_Count, {
+                                                          id: item.id,
+                                                          price: e.target.value
+                                                      }])}
+                                        />
                                     </TableCell>
-                                    <TableCell className={classes.changer} key={item.key}>
-                                        {item.count}
+
+                                    <TableCell onClick={e => handlePrice_Count(e, 'count', item.id)}
+                                               className={classes.changer}>
+                                        <span
+                                            style={{
+                                                display: !!displayInputCount.length && displayInputCount.includes(item.id) ? 'none' : 'block',
+                                                fontFamily: 'Vazir-bold'
+                                            }}> {item.count} </span>
+                                        <InputChanger type="number"
+                                                      style={{display: !!displayInputCount.length && displayInputCount.includes(item.id) ? 'block' : 'none'}}
+                                                      placeholder={item.count}
+                                        />
                                     </TableCell>
+
                                 </TableRow>
-                            )) : skeletonCount.map(item => (
-                                <TableRow hover role="checkbox" tabIndex={-1}>
+                            )) : skeletonCount.map((item, index) => (
+                                <TableRow hover role="checkbox" tabIndex={-1} key={`${index}`}>
                                     <TableCell sx={{width: '80%'}}>
                                         <Skeleton animation="wave" variant="rect" width={300}/>
                                     </TableCell>
-                                    <TableCell key={item.key}>
+                                    <TableCell>
                                         <Skeleton className={classes.changer} animation="wave" variant="rect"
                                                   width={50}/>
                                     </TableCell>
-                                    <TableCell key={item.key}>
+                                    <TableCell>
                                         <Skeleton className={classes.changer} animation="wave" variant="rect"
                                                   width={50}/>
                                     </TableCell>

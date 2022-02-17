@@ -12,7 +12,7 @@ class HttpService {
             // console.log('CONFIG: ', config);
             const token = localStorage.getItem(ACCESS_TOKEN);
             if (config.url !== LOGIN) {
-                config.headers['Authorization'] = `${token}`
+                config.headers['Token'] = `${token}`
             }
 
             return config;
@@ -30,7 +30,7 @@ class HttpService {
                     localStorage.setItem(IS_LOGGED_IN, false.toString());
                     // window.location.href = 'http://localhost:3000' + PATHS.SIGN_IN;
                 } else {
-                    toast.error(error.response.data === 'No user with those credentials!' ? 'نام کاربری یا رمز عبور اشتباه است' : error.response.data);
+                    toast.error(error.response.data === 'No user with those credentials!' ? 'نام کاربری یا رمز عبور اشتباه است' : error.response.data ? false : 'خطایی رخ داده است');
                 }
                 return Promise.reject(error);
             })

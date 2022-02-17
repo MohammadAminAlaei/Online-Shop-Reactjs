@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
 import {
     Box,
-    Button,
-    Paper,
+    Button, InputLabel, MenuItem,
+    Paper, Select,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead, TablePagination,
-    TableRow,
+    TableRow, TextField,
     Typography
 } from '@mui/material';
 import {makeStyles} from '@mui/styles';
@@ -27,6 +27,18 @@ import SelectUnstyled, {selectUnstyledClasses} from '@mui/base/SelectUnstyled';
 import OptionUnstyled, {optionUnstyledClasses} from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
 import Skeleton from '@mui/material/Skeleton';
+import Backdrop from '@mui/material/Backdrop';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
+import Input from '@mui/material/Input';
+import {FileInput} from '../../components/FileInput/ّFileInput.component';
+import FormControl from '@mui/material/FormControl';
+import {CKEditor} from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import parse from 'html-react-parser';
+import {toast} from 'react-toastify';
+
 
 const StyledButton = styled('button')`
   font-family: IBM Plex Sans, sans-serif;
@@ -178,6 +190,22 @@ const useStyle = makeStyles(theme => ({
             padding: '.8rem 2.4rem!important',
             width: '100%',
         },
+    },
+    modalBox: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 700,
+        backgroundColor: '#fff',
+        border: '2px solid #000',
+        boxShadow: 24,
+        padding: '1rem',
+        [theme.breakpoints.down('md')]: {
+            width: '80%',
+        }, [theme.breakpoints.down('sm')]: {
+            width: '90%',
+        }
     }
 }));
 
@@ -199,13 +227,38 @@ const columns = [
     }
 ];
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
 
 const OrdersManage = props => {
 
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
     const [numberOfPages, setNumberOfPages] = useState(10);
-    const [value, setValue] = React.useState('');
+    const [value, setValue] = useState('');
+    const [typeModal, seyTypeModal] = useState('');
+    const [open, setOpen] = useState(false);
+    const [description, setDescription] = useState('');
+    const [openModalDelete, setOpenModalDelete] = useState(false);
+    const [deleteOrderId, setDeleteOrderId] = useState([]);
+
+
+    const handleModal = (id, type) => {
+        setOpen(true);
+        type === 'add' ? seyTypeModal('add') : seyTypeModal('edit')
+    }
+
+    const handleClose = () => setOpen(false);
 
 
     useEffect(() => {
@@ -222,6 +275,49 @@ const OrdersManage = props => {
         });
     };
 
+    const [grouping, setGrouping] = React.useState('');
+
+    const handleGrouping = (event) => {
+        setGrouping(event.target.value);
+    };
+
+    const handleDescription = (event, editor) => {
+        const descripData = editor.getData();
+        setDescription(descripData);
+    };
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        // handleClose();
+        const form = new FormData(e.target);
+        const data = Object.fromEntries(form);
+        const newData = !!description && parse(description).props.children;
+        data.description = newData;
+        toast.success('اطلاعات با موفقیت ویرایش شد');
+    };
+
+    const handleOpenModalDelete = (e, id) => {
+        setOpenModalDelete(true);
+        setDeleteOrderId([...deleteOrderId, {id}]);
+    }
+
+    const handleCloseModalDelete = (id) => {
+        setOpenModalDelete(false);
+        setDeleteOrderId([]);
+    }
+
+
+    const handleDeleteOrder = () => {
+        deleteOrderId.forEach(order => {
+            http.delete(`${PRODUCTS}/${order.id}`).then(res => {
+                fetchProducts();
+                toast.success('کالا با موفقیت حذف شد');
+                setOpenModalDelete(false);
+            }).catch(err => {
+                toast.error('خطا در حذف کالا');
+            })
+        })
+    };
 
     const classes = useStyle();
 
@@ -243,7 +339,64 @@ const OrdersManage = props => {
                         <StyledOption value="">جدیدترین محصولات</StyledOption>
                     </CustomSelect>
                 </div>
-                <Button className={classes.button} color="success" variant="contained"> افزودن کالا </Button>
+                <Button onClick={e => handleModal(null, 'add')} className={classes.button} color="success"
+                        variant="contained"> افزودن
+                    کالا </Button>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open}
+                    onClose={handleClose}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}>
+                    <Fade in={open}>
+                        <Box className={classes.modalBox}>
+                            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                <Typography sx={{my: 1, mb: 4}} id="transition-modal-title" variant="h6" component="h3">
+                                    {typeModal === 'add' ? ' افزودن ' : ' ویرایش '}کالا
+                                </Typography>
+                                <Button onClick={handleClose}> <HighlightOffTwoToneIcon/>
+                                </Button>
+                            </Box>
+                            <form onSubmit={handleSubmit}
+                                  style={{'display': 'flex', 'flexDirection': 'column', 'gap': '25px'}}>
+                                <FileInput label="تصویر کالا"/>
+                                <TextField required={typeModal === 'add'} fullWidth label="نام کالا"
+                                           id="fullWidth"/>
+                                <TextField required={typeModal === 'add'} type="number" fullWidth label="قیمت / تومان"
+                                           id="fullWidth"/>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">دسته بندی</InputLabel>
+                                    <Select required={typeModal === 'add'}
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={grouping}
+                                            label="دسته بندی"
+                                            onChange={handleGrouping}
+                                    >
+                                        <MenuItem value="گوشی مبایل">گوشی مبایل</MenuItem>
+                                        <MenuItem value="لپتاپ">لپتاپ</MenuItem>
+                                        <MenuItem value="کامپیوتر همه کاره">کامپیوتر</MenuItem>
+                                        <MenuItem value="هدفون">هدفون</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <label> توضیحات:
+                                    <CKEditor
+                                        editor={ClassicEditor}
+                                        name="description"
+                                        data=""
+                                        onChange={handleDescription}
+                                        config={{language: 'fa'}}
+                                    />
+                                </label>
+                                <Button type="submit" variant="contained"> ذخیره </Button>
+                            </form>
+                        </Box>
+                    </Fade>
+                </Modal>
             </Box>
             <Paper sx={{width: '100%', overflow: 'hidden'}}>
                 <TableContainer>
@@ -264,8 +417,8 @@ const OrdersManage = props => {
                         </TableHead>
                         <TableBody>
                             {!!data.length ? data.map(item => (
-                                <TableRow hover role="checkbox" tabIndex={-1}>
-                                    <TableCell key={item.id}>
+                                <TableRow hover role="checkbox" tabIndex={-1} key={item.id}>
+                                    <TableCell>
                                         <figure style={{'width': '60px', 'height': 'auto'}}>
                                             <img style={{'width': '100%'}} src={item.image[0]}
                                                  alt={`${item.id}${item.image[1]}`}/>
@@ -279,23 +432,25 @@ const OrdersManage = props => {
                                     </TableCell>
                                     <TableCell key={item.key}>
                                         <Box sx={{display: 'flex', gap: '10px'}}>
-                                            <Button color="warning" variant="contained"> ویرایش </Button>
-                                            <Button color="error" variant="contained"> حذف </Button>
+                                            <Button onClick={e => handleModal(item.id, 'edit')} color="warning"
+                                                    variant="contained"> ویرایش </Button>
+                                            <Button onClick={e => handleOpenModalDelete(e, item.id)} color="error"
+                                                    variant="contained"> حذف </Button>
                                         </Box>
                                     </TableCell>
                                 </TableRow>
-                            )) : skeletonCount.map(item => (
-                                <TableRow hover role="checkbox" tabIndex={-1}>
+                            )) : skeletonCount.map((item, index) => (
+                                <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                     <TableCell>
                                         <Skeleton animation="wave" variant="rect" width={60} height={60}/>
                                     </TableCell>
-                                    <TableCell key={item.key}>
+                                    <TableCell>
                                         <Skeleton animation="wave" variant="rect" width={200}/>
                                     </TableCell>
-                                    <TableCell key={item.key}>
+                                    <TableCell>
                                         <Skeleton animation="wave" variant="rect" width={200}/>
                                     </TableCell>
-                                    <TableCell key={item.key}>
+                                    <TableCell>
                                         <Box sx={{display: 'flex', gap: '10px'}}>
                                             <Skeleton animation="wave" width={90} height={70}/>
                                             <Skeleton animation="wave" width={90} height={70}/>
@@ -307,6 +462,32 @@ const OrdersManage = props => {
                     </Table>
                 </TableContainer>
             </Paper>
+            <Modal
+                aria-labelledby="spring-modal-title"
+                aria-describedby="spring-modal-description"
+                open={openModalDelete}
+                onClose={handleCloseModalDelete}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={openModalDelete}>
+                    <Box sx={style}>
+                        <Typography sx={{textAlign: 'center'}} id="spring-modal-title" variant="h6"
+                                    component="h2"> آیا
+                            از حذف کردن کالا
+                            مطمئنید? </Typography>
+                        <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 3}}>
+                            <Button onClick={handleDeleteOrder} sx={{width: '100px'}} color="success"
+                                    variant="contained"> بله </Button>
+                            <Button onClick={handleCloseModalDelete} sx={{width: '100px'}}
+                                    variant="contained"> خیر </Button>
+                        </Box>
+                    </Box>
+                </Fade>
+            </Modal>
             <AppPagination setPage={setPage} pageNumber={numberOfPages}/>
         </>
     );
@@ -314,10 +495,11 @@ const OrdersManage = props => {
 
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        getProducts: () => dispatch(getProduct()),
+        return {
+            getProducts: () => dispatch(getProduct()),
+        }
     }
-};
+;
 
 const OrdersManager = connect(undefined, mapDispatchToProps)(OrdersManage);
 export {OrdersManager};

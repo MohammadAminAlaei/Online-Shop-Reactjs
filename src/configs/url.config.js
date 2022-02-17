@@ -10,4 +10,13 @@ export const PRODUCTS = '/products';
 
 export const CUSTOMERS = '/customers';
 
+// FILTERS
+
+export const FILTERS = {
+    MOBILES: '?category.name=گوشی مبایل',
+    LAPTOPS: '?category.name=لپتاپ',
+    COMPUTERS: '?category.name=کامپیوتر همه کاره',
+    HEADPHONES: '?category.name=هدفون بی سیم',
+};
+
 
