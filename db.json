@@ -1,37 +1,16 @@
 {
   "products": [
     {
-      "firstName": "مدل iPhone 8Plus",
-      "brand": "اپل",
+      "firstName": "test",
+      "brand": "samsung",
       "image": [
-        "http://localhost:3002/files/03353e9e0c22a86e96681080180aee0f",
-        "http://localhost:3002/files/d891afc311a3685b8903895ab68093fa",
-        "http://localhost:3002/files/bc1eb32cfeaf829ee5676f054666a52f",
-        "http://localhost:3002/files/658b403da7012581a05a01f5968703bd"
+        "http://localhost:3002/files/a47c5802b7bb22c01a09bb9853568a49"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "500",
-      "count": "2200",
-      "createdAt": 1644277712527,
-      "category": {
-        "name": "گوشی مبایل",
-        "icon": "65ddd8b1bbce4d8396b62611147fa1d6"
-      },
-      "id": 2
-    },
-    {
-      "firstName": "مدل iPhone se",
-      "brand": "اپل",
-      "image": [
-        "http://localhost:3002/files/03353e9e0c22a86e96681080180aee0f",
-        "http://localhost:3002/files/d891afc311a3685b8903895ab68093fa",
-        "http://localhost:3002/files/bc1eb32cfeaf829ee5676f054666a52f",
-        "http://localhost:3002/files/658b403da7012581a05a01f5968703bd"
-      ],
-      "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "500",
-      "count": "2200",
-      "createdAt": 1644277712527,
+      "price": "60",
+      "count": "80",
+      "createdAt": 1645149152367,
+      "description": "",
       "category": {
         "name": "گوشی مبایل",
         "icon": "65ddd8b1bbce4d8396b62611147fa1d6"
@@ -39,8 +18,8 @@
       "id": 3
     },
     {
-      "firstName": "مدل iPhone 6s",
-      "brand": "اپل",
+      "firstName": "مدل 7plus",
+      "brand": "",
       "image": [
         "http://localhost:3002/files/03353e9e0c22a86e96681080180aee0f",
         "http://localhost:3002/files/d891afc311a3685b8903895ab68093fa",
@@ -48,14 +27,15 @@
         "http://localhost:3002/files/658b403da7012581a05a01f5968703bd"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "500",
-      "count": "2200",
+      "price": "800",
+      "count": "32",
       "createdAt": 1644277712527,
       "category": {
         "name": "گوشی مبایل",
         "icon": "65ddd8b1bbce4d8396b62611147fa1d6"
       },
-      "id": 4
+      "id": 4,
+      "category_name": ""
     },
     {
       "firstName": "مدل iPhone X",
@@ -67,8 +47,8 @@
         "http://localhost:3002/files/658b403da7012581a05a01f5968703bd"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "800",
-      "count": 120,
+      "price": "9000",
+      "count": "270",
       "createdAt": 1644277770238,
       "category": {
         "name": "گوشی مبایل",
@@ -86,8 +66,8 @@
         "http://localhost:3002/files/658b403da7012581a05a01f5968703bd"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "50",
-      "count": 30,
+      "price": "1350",
+      "count": "600",
       "createdAt": 1644277786965,
       "category": {
         "name": "گوشی مبایل",
@@ -105,7 +85,7 @@
         "http://localhost:3002/files/db8ff5a21863437fef0c5d5dcf2dd1c1"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "280",
+      "price": "120000",
       "count": 15,
       "createdAt": 1644278521213,
       "category": {
@@ -163,7 +143,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "3200",
-      "count": 8,
+      "count": "18",
       "createdAt": 1644278659437,
       "category": {
         "name": "لپتاپ",
@@ -182,7 +162,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "5000",
-      "count": 16,
+      "count": "22",
       "createdAt": 1644278704120,
       "category": {
         "name": "لپتاپ",
@@ -531,6 +511,23 @@
         "icon": "65ddd8b1bbce4d8396b62611147fa1d6"
       },
       "id": 29
+    },
+    {
+      "firstName": "new",
+      "brand": "samsung",
+      "image": [
+        "http://localhost:3002/files/222549e569aa4c79fd69f076c50b0871"
+      ],
+      "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
+      "price": "60",
+      "count": "50",
+      "createdAt": 1645163590071,
+      "description": "<p>testing</p>",
+      "category": {
+        "name": "گوشی مبایل",
+        "icon": "65ddd8b1bbce4d8396b62611147fa1d6"
+      },
+      "id": 30
     }
   ],
   "category": [
@@ -835,6 +832,7 @@
     "products.get": false,
     "orders.post": false,
     "upload": true,
+    "products.patch": false,
     "products": "admin",
     "orders": "admin",
     "users": "admin",

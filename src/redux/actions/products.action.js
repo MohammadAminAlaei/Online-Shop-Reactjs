@@ -7,7 +7,6 @@ export const getProduct = () => {
     return (dispatch, getState) => {
         return getProducts()
             .then(response => {
-
                 dispatch(getProduc(response));
                 return response;
             })

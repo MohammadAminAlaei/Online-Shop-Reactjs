@@ -5,7 +5,7 @@ import {ButtonBase, TextField} from '@mui/material';
 import {makeStyles} from '@mui/styles';
 
 
-const FileInput = ({label, onChange, error}) => {
+const FileInput = ({label, onChange, error, name}) => {
     const ref = useRef();
     const theme = useTheme();
     const classes = useStyles();
@@ -53,6 +53,7 @@ const FileInput = ({label, onChange, error}) => {
                     hidden
                     onChange={handleChange}
                     max-size="2000"
+                    name={name}
                 />
             </ButtonBase>
         </Box>

@@ -27,6 +27,7 @@ import SelectUnstyled, {selectUnstyledClasses} from '@mui/base/SelectUnstyled';
 import OptionUnstyled, {optionUnstyledClasses} from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
 import Skeleton from '@mui/material/Skeleton';
+import {toast} from 'react-toastify';
 
 const StyledButton = styled('button')`
   font-family: IBM Plex Sans, sans-serif;
@@ -243,23 +244,26 @@ const InventoriManage = props => {
 
         changePrice_Count.forEach(item => {
 
-            http.patch(`http://localhost:3002/products/${2}`, {
-                count: 10
+            http.patch(`${PRODUCTS}/${item.id}`, {
+                count: item.count,
+                price: item.price
             }).then(res => {
                 console.log(res)
-                setDisplayButton('false')
-                setDisplayInputPrice([])
-                setDisplayInputCount([])
+            }).catch(err => {
+                console.log(err)
+                toast.error('خطا در ثبت اطلاعات')
             })
         })
-
+        toast.success('اطلاعات با موفقیت ثبت شد')
+        setDisplayButton('false')
+        setDisplayInputPrice([]);
+        setDisplayInputCount([]);
+        setChangePrice_Count([]);
     }
 
     const skeletonCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     const classes = useStyle();
-
-    console.log(changePrice_Count)
 
     return (
         <>
@@ -332,6 +336,10 @@ const InventoriManage = props => {
                                         <InputChanger type="number"
                                                       style={{display: !!displayInputCount.length && displayInputCount.includes(item.id) ? 'block' : 'none'}}
                                                       placeholder={item.count}
+                                                      onBlur={e => setChangePrice_Count([...changePrice_Count, {
+                                                          id: item.id,
+                                                          count: e.target.value
+                                                      }])}
                                         />
                                     </TableCell>
 

@@ -251,20 +251,34 @@ const OrdersManage = props => {
     const [description, setDescription] = useState('');
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [deleteOrderId, setDeleteOrderId] = useState([]);
+    const [imageArray, setImageArray] = useState([]);
+    const [editId, setEditId] = useState(null);
+    const [dataEdit, setDataEdit] = useState([])
 
 
     const handleModal = (id, type) => {
         setOpen(true);
-        type === 'add' ? seyTypeModal('add') : seyTypeModal('edit')
+        type === 'add' ? seyTypeModal('add') : seyTypeModal('edit');
+        setEditId(id);
     }
 
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setEditId(null);
+        setDataEdit([]);
+        setOpen(false);
+    }
 
 
     useEffect(() => {
         fetchProducts();
+        if (editId !== null) {
+            http.get(`${PRODUCTS}/${editId}`).then(res => {
+                setDataEdit(res.data);
+            });
+        }
 
-    }, [page, value]);
+    }, [page, value, editId]);
+
 
     // FETCH PRODUCTS
     const fetchProducts = async () => {
@@ -286,14 +300,57 @@ const OrdersManage = props => {
         setDescription(descripData);
     };
 
-    const handleSubmit = e => {
+    const handleSubmit = (e, id = editId) => {
         e.preventDefault();
-        // handleClose();
+        setEditId(null)
         const form = new FormData(e.target);
-        const data = Object.fromEntries(form);
-        const newData = !!description && parse(description).props.children;
-        data.description = newData;
-        toast.success('اطلاعات با موفقیت ویرایش شد');
+        let data = Object.fromEntries(form);
+        const dataToSend = {
+            'firstName': data.firstName,
+            'brand': data.brand,
+            'image': imageArray,
+            'thumbnail': '65ddd8b1bbce4d8396b62611147fa1d6',
+            'price': data.price,
+            'count': data.count,
+            'createdAt': Date.now(),
+            'description': description,
+            'category': {
+                'name': data.category_name,
+                'icon': '65ddd8b1bbce4d8396b62611147fa1d6'
+            },
+        };
+
+        try {
+            if (typeModal === 'add') {
+                http.post(PRODUCTS, dataToSend).then(res => {
+                    console.log(res);
+                    fetchProducts();
+                    setOpen(false);
+                    toast.success('کالا با موفقیت اضافه شد');
+                    setImageArray([]);
+                    setData([]);
+                    setEditId(null)
+                    setDescription('');
+                    data = {};
+                    setEditId(null)
+                });
+            } else {
+                http.put(`${PRODUCTS}/${id}`, dataToSend).then(res => {
+                    fetchProducts();
+                    setOpen(false);
+                    toast.success('کالا با موفقیت ویرایش شد');
+                    setImageArray([]);
+                    setData([]);
+                    setEditId(null)
+                    setDescription('');
+                    data = {};
+                    setEditId(null)
+                });
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const handleOpenModalDelete = (e, id) => {
@@ -318,6 +375,24 @@ const OrdersManage = props => {
             })
         })
     };
+
+    const handleUploadImage = e => {
+        e.preventDefault();
+        const data = new FormData();
+        data.append('image', e.target.image.files[0]);
+
+        try {
+            http.post(`/upload`, data).then(res => {
+                setImageArray([...imageArray, `http://localhost:3002/files/${res.data.filename}`]);
+                toast.success('تصویر با موفقیت آپلود شد');
+            }).catch(err => {
+                toast.error('خطا در آپلود تصویر');
+            })
+
+        } catch (e) {
+            return Promise.reject('خطا در آپلود تصویر')
+        }
+    }
 
     const classes = useStyle();
 
@@ -361,21 +436,48 @@ const OrdersManage = props => {
                                 <Button onClick={handleClose}> <HighlightOffTwoToneIcon/>
                                 </Button>
                             </Box>
+                            <form onSubmit={handleUploadImage}>
+                                <FileInput label="تصویر کالا" name="image"/>
+                                <Button variant="contained" type="submit"
+                                        sx={{
+                                            width: {xs: '100%', sm: '40%'},
+                                            display: 'block',
+                                            margin: 'auto',
+                                            my: 2
+                                        }}> آپلود
+                                    عکس </Button>
+                            </form>
                             <form onSubmit={handleSubmit}
                                   style={{'display': 'flex', 'flexDirection': 'column', 'gap': '25px'}}>
-                                <FileInput label="تصویر کالا"/>
                                 <TextField required={typeModal === 'add'} fullWidth label="نام کالا"
-                                           id="fullWidth"/>
+                                           id="fullWidth" name="firstName"
+                                           placeholder={!!dataEdit && dataEdit.firstName}
+                                />
                                 <TextField required={typeModal === 'add'} type="number" fullWidth label="قیمت / تومان"
-                                           id="fullWidth"/>
+                                           id="fullWidth" name="price"
+                                           placeholder={!!dataEdit && dataEdit.price}
+                                />
+                                <TextField required={typeModal === 'add'}
+                                           fullWidth
+                                           label="برند"
+                                           id="fullWidth" name="brand"
+                                           placeholder={!!dataEdit && dataEdit.brand}
+                                />
+                                <TextField required={typeModal === 'add'}
+                                           fullWidth
+                                           label="تعداد"
+                                           id="fullWidth" name="count"
+                                           placeholder={!!dataEdit && dataEdit.count}
+                                />
                                 <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">دسته بندی</InputLabel>
+                                    <InputLabel name="category" id="demo-simple-select-label">دسته بندی</InputLabel>
                                     <Select required={typeModal === 'add'}
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
                                             value={grouping}
                                             label="دسته بندی"
                                             onChange={handleGrouping}
+                                            name="category_name"
                                     >
                                         <MenuItem value="گوشی مبایل">گوشی مبایل</MenuItem>
                                         <MenuItem value="لپتاپ">لپتاپ</MenuItem>
@@ -392,7 +494,10 @@ const OrdersManage = props => {
                                         config={{language: 'fa'}}
                                     />
                                 </label>
-                                <Button type="submit" variant="contained"> ذخیره </Button>
+                                <Button sx={{
+                                    width: {xs: '100%', sm: '50%'}, display: 'block', margin: 'auto'
+                                }} type="submit"
+                                        variant="contained"> ذخیره < /Button>
                             </form>
                         </Box>
                     </Fade>

@@ -264,8 +264,6 @@ const CommodityManagement = () => {
         });
     }
 
-    console.log(dataModal)
-
     const handleClose = () => setOpen(false);
 
 
@@ -443,13 +441,16 @@ const CommodityManagement = () => {
                                 </Paper>
                             </Box>
                         )) : [1, 2, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
-                            <Box sx={{my: 1, display: 'flex', gap: '20px'}}>
-                                <Skeleton key={index} variant="rect" width={50} height={20}/>
-                                <Skeleton key={index} variant="rect" width={300} height={20}/>
+                            <Box sx={{my: 1, display: 'flex', gap: '20px'}} key={index}>
+                                <Skeleton variant="rect" width={50} height={20}/>
+                                <Skeleton variant="rect" width={300} height={20}/>
                             </Box>
                         ))}
-                        <Button onClick={handleClose} color="success" type="submit" variant="contained"> تحویل داده
-                            شد </Button>
+                        {!!dataModal.length && dataModal[0].status === 'done' ? (
+
+                            <Button onClick={handleClose} color="success" type="submit" variant="contained"> تحویل داده
+                                شد </Button>
+                        ) : <p style={{textAlign: 'center'}}> زمان تحویل: بزودی </p>}
                     </Box>
                 </Fade>
             </Modal>

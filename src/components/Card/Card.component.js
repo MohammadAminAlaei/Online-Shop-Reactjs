@@ -31,7 +31,7 @@ const useStyle = makeStyles(theme => ({
 }));
 
 
-const CardComponent = ({img, firstName, price, brand, description}) => {
+const CardComponent = ({img, firstName, price, brand, description, onClick}) => {
 
     const classes = useStyle()
 
@@ -41,7 +41,7 @@ const CardComponent = ({img, firstName, price, brand, description}) => {
     }
 
     return (
-        <Card onClick={e => alert('salam')} className={classes.mainCard}>
+        <Card onClick={onClick} className={classes.mainCard}>
             <figure className={styles.figure} onClick={e => handleClick(e)}>
                 <CardMedia
                     component="img"

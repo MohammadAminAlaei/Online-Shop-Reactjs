@@ -7,6 +7,6 @@ export const PATHS = {
     MAC_PAYMENT: '/mac-payment',
     ORDERS_MANAGER: '/orders-manager',
     PAYMENT_RESULT: '/payment-result',
-    PRODUCT_LIST: '/product-list',
-    PURCHASE: '/purchase'
+    PRODUCT_LIST: '/product-list/:group',
+    PURCHASE: '/purchase/:id',
 }

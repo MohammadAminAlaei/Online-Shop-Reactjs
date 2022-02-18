@@ -20,7 +20,15 @@ const AUTH_JWT_OPTIONS = {expiresIn: 100000};
 // Load DB file for Authentication middleware and endpoints
 const DB = JSON.parse(fs.readFileSync(path.join(__dirname, './db.json'), 'utf-8'));
 
-server.use(cors());
+server.use(cors({
+    origin: true,
+    credentials: true,
+    preflightContinue: false,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+}));
+
+server.options('*', cors());
+
 
 // Authorization Middleware
 server.use((req, res, next) => {

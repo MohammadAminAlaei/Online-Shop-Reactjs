@@ -6,6 +6,8 @@ import {connect} from 'react-redux';
 import {getMobiles, getComputers, getHeadPhones, getLaptopes} from 'redux/actions/products.action';
 import {Button, Skeleton} from '@mui/material';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import {Link, useNavigate} from 'react-router-dom';
+import {PATHS} from 'configs/routes.config';
 
 
 const HomePage = props => {
@@ -14,7 +16,8 @@ const HomePage = props => {
     const [mobilesData, setMobilesData] = useState([])
     const [laptopData, setLaptopData] = useState([])
     const [computerData, setComputerData] = useState([])
-    const [headPhoneData, setHeadPhoneData] = useState([])
+    const [headPhoneData, setHeadPhoneData] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         getMobiles().then(res => setMobilesData(res))
@@ -23,12 +26,17 @@ const HomePage = props => {
         getHeadPhones().then(res => setHeadPhoneData(res))
     }, []);
 
-    const skeletonNumber = [1, 2, 3, 4, 5, 6]
+    const handlePurchase = (e, id) => {
+        navigate(`purchase/${id}`);
+    }
+
+    const skeletonNumber = [1, 2, 3, 4, 5, 6];
 
 
     return (
         <>
-            <Button endIcon={<ArrowLeftIcon sx={{fontSize: '3rem!important'}}/>}
+            <Button onClick={e => navigate('product-list/گوشی مبایل')}
+                    endIcon={<ArrowLeftIcon sx={{fontSize: '3rem!important'}}/>}
                     sx={{fontSize: '1.8rem', lineHeight: '4rem', padding: '1.2rem 0'}}
                     size="large"> آیتم های گروه
                 گوشی مبایل </Button>
@@ -40,7 +48,9 @@ const HomePage = props => {
                             <CardComponent
                                 img={item.image[0]}
                                 price={item.price} firstName={item.firstName} brand={item.brand}
-                                description={item.description}/>
+                                description={item.description}
+                                onClick={e => handlePurchase(e, item.id)}
+                            />
                         </Grid>
                     )) : (skeletonNumber.map((item, index) => (
                             <Grid item xs={12} sm={4} md={4} key={index}>
@@ -62,7 +72,8 @@ const HomePage = props => {
                             <CardComponent
                                 img={item.image[0]}
                                 price={item.price} firstName={item.firstName} brand={item.brand}
-                                description={item.description}/>
+                                description={item.description}
+                                onClick={e => handlePurchase(e, item.id)}/>
                         </Grid>
                     )) : (skeletonNumber.map((item, index) => (
                             <Grid item xs={12} sm={4} md={4} key={index}>
@@ -84,7 +95,8 @@ const HomePage = props => {
                             <CardComponent
                                 img={item.image[0]}
                                 price={item.price} firstName={item.firstName} brand={item.brand}
-                                description={item.description}/>
+                                description={item.description}
+                                onClick={e => handlePurchase(e, item.id)}/>
                         </Grid>
                     )) : (skeletonNumber.map((item, index) => (
                             <Grid item xs={12} sm={4} md={4} key={index}>
@@ -106,7 +118,8 @@ const HomePage = props => {
                             <CardComponent
                                 img={item.image[0]}
                                 price={item.price} firstName={item.firstName} brand={item.brand}
-                                description={item.description}/>
+                                description={item.description}
+                                onClick={e => handlePurchase(e, item.id)}/>
                         </Grid>
                     )) : (skeletonNumber.map((item, index) => (
                             <Grid item xs={12} sm={4} md={4} key={index}>
