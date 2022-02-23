@@ -10,8 +10,8 @@
         "658b403da7012581a05a01f5968703bd"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "",
-      "count": "",
+      "price": "1000",
+      "count": "10",
       "createdAt": 1645637101787,
       "description": "<p>test</p>",
       "category": {
@@ -50,7 +50,7 @@
         "db8ff5a21863437fef0c5d5dcf2dd1c1"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "0",
+      "price": "20",
       "count": "0",
       "createdAt": 1644278521213,
       "description": "test",
@@ -430,8 +430,8 @@
         "d6d1fb61df746cf103a5adbe0bf829a7"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "",
-      "count": "",
+      "price": "800",
+      "count": "60",
       "createdAt": 1645636142573,
       "description": "<p>test</p>",
       "category": {
@@ -467,8 +467,8 @@
         "873b7d40037f0510969b1e124763c20f"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "",
-      "count": "",
+      "price": "80",
+      "count": "50",
       "createdAt": 1645636973403,
       "description": "<p>hello</p>",
       "category": {
@@ -487,8 +487,8 @@
         "9b47f9cfacd9a6cd3d982c32896aa4a9"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "",
-      "count": "",
+      "price": "60",
+      "count": "40",
       "createdAt": 1645636269333,
       "description": "<p>test</p>",
       "category": {
@@ -504,8 +504,8 @@
         "455a8aa1a528871aa2492e5aaac475b9"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "",
-      "count": "",
+      "price": "50",
+      "count": "70",
       "createdAt": 1645636966731,
       "description": "<h2>TESTTTTTTTTT</h2>",
       "category": {
@@ -521,8 +521,8 @@
         "edc9e977677b6ccaa051f67429e35c35"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "",
-      "count": "",
+      "price": "60",
+      "count": "10",
       "createdAt": 1645636957419,
       "description": "",
       "category": {
@@ -532,15 +532,15 @@
       "id": 32
     },
     {
-      "firstName": "again2wss",
-      "brand": "again2",
+      "firstName": "1",
+      "brand": "1",
       "image": [
         "427922c70fec3cebe55dbeb8858b4575"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "",
-      "count": "",
-      "createdAt": 1645636774836,
+      "price": "50",
+      "count": "50",
+      "createdAt": 1645638470869,
       "description": "",
       "category": {
         "name": "لپتاپ",

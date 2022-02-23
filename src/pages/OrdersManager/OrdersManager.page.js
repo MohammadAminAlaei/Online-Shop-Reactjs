@@ -348,7 +348,19 @@ const OrdersManage = props => {
                     setEditId(null)
                 });
             } else {
-                http.put(`${PRODUCTS}/${id}`, dataToSend).then(res => {
+                http.patch(`${PRODUCTS}/${id}`, {
+                    'firstName': data.firstName,
+                    'brand': data.brand,
+                    'image': imageArray,
+                    'thumbnail': '65ddd8b1bbce4d8396b62611147fa1d6',
+                    'createdAt': Date.now(),
+                    'description': description,
+                    'category': {
+                        'name': data.category_name,
+                        'icon': '65ddd8b1bbce4d8396b62611147fa1d6'
+                    },
+
+                }).then(res => {
                     fetchProducts();
                     handleClose();
                     toast.success('کالا با موفقیت ویرایش شد');
