@@ -246,19 +246,22 @@ const OrdersManage = props => {
     const [page, setPage] = useState(1);
     const [numberOfPages, setNumberOfPages] = useState(10);
     const [value, setValue] = useState('');
-    const [typeModal, seyTypeModal] = useState('');
+    const [typeModal, setTypeModal] = useState('');
     const [open, setOpen] = useState(false);
     const [description, setDescription] = useState('');
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [deleteOrderId, setDeleteOrderId] = useState([]);
     const [imageArray, setImageArray] = useState([]);
     const [editId, setEditId] = useState(null);
-    const [dataEdit, setDataEdit] = useState([])
+    const [dataEdit, setDataEdit] = useState([]);
+    const [grouping, setGrouping] = React.useState('');
+    const [editOrderName, setEditOrderName] = useState('');
+    const [editOrderBrand, setEditOrderBrand] = useState('');
 
 
     const handleModal = (id, type) => {
         setOpen(true);
-        type === 'add' ? seyTypeModal('add') : seyTypeModal('edit');
+        type === 'add' ? setTypeModal('add') : setTypeModal('edit');
         setEditId(id);
     }
 
@@ -266,6 +269,11 @@ const OrdersManage = props => {
         setEditId(null);
         setDataEdit([]);
         setOpen(false);
+        setEditOrderName('');
+        setEditOrderBrand('');
+        setGrouping('');
+        setDescription('')
+        setImageArray([]);
     }
 
 
@@ -274,6 +282,11 @@ const OrdersManage = props => {
         if (editId !== null) {
             http.get(`${PRODUCTS}/${editId}`).then(res => {
                 setDataEdit(res.data);
+                setEditOrderName(res.data.firstName);
+                setEditOrderBrand(res.data.brand);
+                setGrouping(res.data.category.name);
+                setDescription(res.data.description);
+                setImageArray(res.data.image);
             });
         }
 
@@ -289,7 +302,6 @@ const OrdersManage = props => {
         });
     };
 
-    const [grouping, setGrouping] = React.useState('');
 
     const handleGrouping = (event) => {
         setGrouping(event.target.value);
@@ -322,10 +334,11 @@ const OrdersManage = props => {
 
         try {
             if (typeModal === 'add') {
+                setEditOrderName('');
+                setEditOrderBrand('');
                 http.post(PRODUCTS, dataToSend).then(res => {
-                    console.log(res);
                     fetchProducts();
-                    setOpen(false);
+                    handleClose();
                     toast.success('کالا با موفقیت اضافه شد');
                     setImageArray([]);
                     setData([]);
@@ -337,7 +350,7 @@ const OrdersManage = props => {
             } else {
                 http.put(`${PRODUCTS}/${id}`, dataToSend).then(res => {
                     fetchProducts();
-                    setOpen(false);
+                    handleClose();
                     toast.success('کالا با موفقیت ویرایش شد');
                     setImageArray([]);
                     setData([]);
@@ -376,14 +389,17 @@ const OrdersManage = props => {
         })
     };
 
+    const handleImageArray = (e) => {
+        setImageArray([]);
+    };
+
     const handleUploadImage = e => {
         e.preventDefault();
         const data = new FormData();
         data.append('image', e.target.image.files[0]);
-
         try {
             http.post(`/upload`, data).then(res => {
-                setImageArray([...imageArray, `http://localhost:3002/files/${res.data.filename}`]);
+                setImageArray([...imageArray, `${res.data.filename}`]);
                 toast.success('تصویر با موفقیت آپلود شد');
             }).catch(err => {
                 toast.error('خطا در آپلود تصویر');
@@ -439,6 +455,7 @@ const OrdersManage = props => {
                             <form onSubmit={handleUploadImage}>
                                 <FileInput label="تصویر کالا" name="image"/>
                                 <Button variant="contained" type="submit"
+                                        onClick={handleImageArray}
                                         sx={{
                                             width: {xs: '100%', sm: '40%'},
                                             display: 'block',
@@ -451,23 +468,26 @@ const OrdersManage = props => {
                                   style={{'display': 'flex', 'flexDirection': 'column', 'gap': '25px'}}>
                                 <TextField required={typeModal === 'add'} fullWidth label="نام کالا"
                                            id="fullWidth" name="firstName"
-                                           placeholder={!!dataEdit && dataEdit.firstName}
+                                           value={editOrderName}
+                                           onChange={e => setEditOrderName(e.target.value)}
                                 />
                                 <TextField required={typeModal === 'add'} type="number" fullWidth label="قیمت / تومان"
                                            id="fullWidth" name="price"
                                            placeholder={!!dataEdit && dataEdit.price}
+                                           sx={{display: typeModal === 'add' ? 'block' : 'none'}}
                                 />
                                 <TextField required={typeModal === 'add'}
                                            fullWidth
                                            label="برند"
                                            id="fullWidth" name="brand"
-                                           placeholder={!!dataEdit && dataEdit.brand}
+                                           value={editOrderBrand}
+                                           onChange={e => setEditOrderBrand(e.target.value)}
                                 />
                                 <TextField required={typeModal === 'add'}
                                            fullWidth
                                            label="تعداد"
                                            id="fullWidth" name="count"
-                                           placeholder={!!dataEdit && dataEdit.count}
+                                           sx={{display: typeModal === 'add' ? 'block' : 'none'}}
                                 />
                                 <FormControl fullWidth>
                                     <InputLabel name="category" id="demo-simple-select-label">دسته بندی</InputLabel>
@@ -479,17 +499,18 @@ const OrdersManage = props => {
                                             onChange={handleGrouping}
                                             name="category_name"
                                     >
-                                        <MenuItem value="گوشی مبایل">گوشی مبایل</MenuItem>
+                                        <MenuItem value="گوشی مبایل">گوشی موبایل</MenuItem>
                                         <MenuItem value="لپتاپ">لپتاپ</MenuItem>
                                         <MenuItem value="کامپیوتر همه کاره">کامپیوتر</MenuItem>
                                         <MenuItem value="هدفون">هدفون</MenuItem>
+                                        <MenuItem value="ساعت هوشمند">ساعت هوشمند</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <label> توضیحات:
                                     <CKEditor
                                         editor={ClassicEditor}
                                         name="description"
-                                        data=""
+                                        data={description}
                                         onChange={handleDescription}
                                         config={{language: 'fa'}}
                                     />
@@ -525,7 +546,8 @@ const OrdersManage = props => {
                                 <TableRow hover role="checkbox" tabIndex={-1} key={item.id}>
                                     <TableCell>
                                         <figure style={{'width': '60px', 'height': 'auto'}}>
-                                            <img style={{'width': '100%'}} src={item.image[0]}
+                                            <img style={{'width': '100%'}}
+                                                 src={`http://localhost:3002/files/${item.image[0]}`}
                                                  alt={`${item.id}${item.image[1]}`}/>
                                         </figure>
                                     </TableCell>
