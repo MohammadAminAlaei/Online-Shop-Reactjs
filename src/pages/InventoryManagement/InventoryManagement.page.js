@@ -219,8 +219,19 @@ const InventoryManage = props => {
 
     useEffect(() => {
         fetchProducts();
-
+        escCancel();
     }, [page, value, displayButton]);
+
+    const escCancel = () => {
+        document.addEventListener('keydown', e => {
+            if (e.keyCode === 27) {
+                setDisplayButton('false')
+                setDisplayInputPrice([]);
+                setDisplayInputCount([]);
+                setChangePrice_Count([]);
+            }
+        })
+    }
 
     // FETCH PRODUCTS
     const fetchProducts = async () => {
@@ -242,23 +253,42 @@ const InventoryManage = props => {
 
     const handleSave = e => {
 
+
         changePrice_Count.forEach(item => {
 
-            http.patch(`${PRODUCTS}/${item.id}`, {
-                count: item.count,
-                price: item.price
-            }).then(res => {
-                console.log(res)
+            // Promise.allSettled([
+            //     http.patch(`${PRODUCTS}/${item.id}`, {
+            //         price: item.price,
+            //         count: item.count
+            //     })
+            // ]).then(res => {
+            //     if (res[0].status === 'fulfilled') {
+            //         toast.success('اطلاعات با موفقیت ثبت شد');
+            //         setDisplayButton('false');
+            //         setDisplayInputPrice([]);
+            //         setDisplayInputCount([]);
+            //         setChangePrice_Count([]);
+            //         fetchProducts();
+            //     }
+            // })
+
+            Promise.all([
+                http.patch(`${PRODUCTS}/${item.id}`, {
+                    price: item.price,
+                    count: item.count
+                })
+            ]).then(() => {
+                toast.success('اطلاعات با موفقیت ثبت شد')
+                fetchProducts();
+                setDisplayButton('false')
+                setDisplayInputPrice([]);
+                setDisplayInputCount([]);
+                setChangePrice_Count([]);
             }).catch(err => {
                 console.log(err)
                 toast.error('خطا در ثبت اطلاعات')
-            })
-            toast.success('اطلاعات با موفقیت ثبت شد')
+            });
         })
-        setDisplayButton('false')
-        setDisplayInputPrice([]);
-        setDisplayInputCount([]);
-        setChangePrice_Count([]);
     }
 
     const skeletonCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

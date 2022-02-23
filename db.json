@@ -11,7 +11,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "1000",
-      "count": "10",
+      "count": "1000",
       "createdAt": 1645637101787,
       "description": "<p>test</p>",
       "category": {
@@ -30,8 +30,8 @@
         "658b403da7012581a05a01f5968703bd"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "1350",
-      "count": "600",
+      "price": "1000",
+      "count": "123",
       "createdAt": 1644277786965,
       "description": "test",
       "category": {
@@ -50,8 +50,8 @@
         "db8ff5a21863437fef0c5d5dcf2dd1c1"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "20",
-      "count": "0",
+      "price": "1500",
+      "count": "1300",
       "createdAt": 1644278521213,
       "description": "test",
       "category": {
@@ -110,7 +110,7 @@
         "db8ff5a21863437fef0c5d5dcf2dd1c1"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "3200",
+      "price": "1500",
       "count": "18",
       "createdAt": 1644278659437,
       "description": "test",
@@ -131,7 +131,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "5000",
-      "count": "22",
+      "count": "1603",
       "createdAt": 1644278704120,
       "description": "test",
       "category": {
