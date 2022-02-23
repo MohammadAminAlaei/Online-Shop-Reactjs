@@ -205,7 +205,7 @@ const columns = [
 ];
 
 
-const InventoriManage = props => {
+const InventoryManage = props => {
 
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
@@ -253,8 +253,8 @@ const InventoriManage = props => {
                 console.log(err)
                 toast.error('خطا در ثبت اطلاعات')
             })
+            toast.success('اطلاعات با موفقیت ثبت شد')
         })
-        toast.success('اطلاعات با موفقیت ثبت شد')
         setDisplayButton('false')
         setDisplayInputPrice([]);
         setDisplayInputCount([]);
@@ -375,5 +375,5 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-const InventoryManagement = connect(undefined, mapDispatchToProps)(InventoriManage);
+const InventoryManagement = connect(undefined, mapDispatchToProps)(InventoryManage);
 export {InventoryManagement};

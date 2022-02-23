@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     AppBar,
     Box, Button,
@@ -131,6 +131,18 @@ const useStyles = makeStyles((theme) => ({
 function HeaderUser(props) {
     const classes = useStyles();
     const navigate = useNavigate();
+    const [orders, setOrders] = useState([])
+
+    useEffect(() => {
+        // didMount()
+    }, []);
+
+    // const didMount = () => {
+    //     let storage = JSON.parse(localStorage.getItem('orders'));
+    //     storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('orders'));
+    //     setOrders(storage)
+    // };
+
     return (
         <div>
             <AppBar>
@@ -152,10 +164,12 @@ function HeaderUser(props) {
                             <Box className={classes.buttons}>
                                 <Button onClick={e => navigate(PATHS.LOGIN_PANEL_MANAGEMENT)}
                                         className={classes.button}>مدیریت</Button>
-                                <Button startIcon={<Badge color="error" badgeContent={99}>
+                                <Button startIcon={<Badge color="error" badgeContent={orders.length}>
                                     <ShoppingCartIcon className={classes.iconSize}/> </Badge>}
                                         className={classes.button}
-                                        variant="text">سبد خرید</Button>
+                                        variant="text"
+                                        onClick={e => navigate(PATHS.BASKET)}
+                                >سبد خرید</Button>
                             </Box>
                         </Box>
                     </Container>

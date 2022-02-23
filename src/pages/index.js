@@ -9,3 +9,4 @@ export {PaymentResult} from './PaymentResult/PaymentResult.page';
 export {ProductsList} from './ProductsList/ProductsList.page';
 export {Purchase} from './Purchase/Purchase.page';
 export {NotFound} from './NotFound/NotFound.page'
+export {Basket} from './Basket/Basket.component'

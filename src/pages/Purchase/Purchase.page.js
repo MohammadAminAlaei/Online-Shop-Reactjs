@@ -29,15 +29,43 @@ const Purchase = props => {
 
     const {id} = useParams();
     const [data, setData] = useState([]);
-    const [image, setImage] = useState([])
+    const [countOrder, setCountOrder] = useState(1);
+    const [orders, setOrders] = useState([]);
 
     useEffect(() => {
         http.get(`${PRODUCTS}/${id}`).then(res => {
             setData([...data, res.data]);
+            didMount();
         });
     }, [id]);
 
-    console.log(data)
+    const didMount = () => {
+        let storage = JSON.parse(localStorage.getItem('orders'));
+        storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('orders'));
+        setOrders(storage);
+        localStorage.setItem('orders', JSON.stringify(orders));
+    }
+
+    const handleAddOrder = e => {
+        let storage = JSON.parse(localStorage.getItem('orders'));
+        console.log(storage)
+
+
+        const order = {
+            count: countOrder,
+            name: data[0].firstName,
+            brand: data[0].brand,
+            price: data[0].price,
+        }
+
+        localStorage.setItem('orders', [...storage, JSON.stringify(order)]);
+    }
+
+    const handleChange = e => {
+        if (e.key === '-' || e.target.value > +'500' || e.target.value[0] === '0') {
+            e.preventDefault();
+        }
+    }
 
     const classes = useStyle();
 
@@ -57,10 +85,20 @@ const Purchase = props => {
                             <Typography variant="h6" component="h1">برند: {item.brand} </Typography>
                             <Typography variant="h6" component="h2"> {item.price} تومان </Typography>
                             <Box style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                                <TextField size="small" sx={{width: '100px'}} type="number" id="outlined-basic"
+                                <TextField defaultValue="1" size="small" sx={{width: '100px'}} type="number"
+                                           id="outlined-basic"
                                            label="تعداد"
-                                           variant="outlined"/>
-                                <Button endIcon={<AddCircleIcon/>} sx={{width: '200px', height: '46px'}}
+                                           variant="outlined"
+                                           InputProps={{
+                                               inputProps: {
+                                                   min: 1, max: item.count,
+                                                   onKeyPress: handleChange
+                                               },
+                                           }}
+                                           onChange={e => setCountOrder(e.target.value)}
+                                />
+                                <Button onClick={handleAddOrder} endIcon={<AddCircleIcon/>}
+                                        sx={{width: '200px', height: '46px'}}
                                         variant="contained"
                                         color="success"> افزودن
                                     به سبد

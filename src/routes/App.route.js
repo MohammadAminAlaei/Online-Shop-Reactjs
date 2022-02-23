@@ -19,6 +19,7 @@ class AppRoute extends Component {
                     <Route path={PATHS.PRODUCT_LIST} element={<PublicRoute component={(props) => <Page.ProductsList {...props} />} />} />
                     <Route path={PATHS.PURCHASE} element={<PublicRoute component={(props) => <Page.Purchase {...props} />} />} />
                     <Route path={PATHS.PAYMENT_RESULT} element={<PublicRoute component={(props) => <Page.PaymentResult {...props} />} />} />
+                    <Route path={PATHS.BASKET} element={<PublicRoute component={(props) => <Page.Basket {...props} />} />} />
                     <Route path='*' element={<Page.NotFound/>} />
                 </Routes>
             </BrowserRouter>

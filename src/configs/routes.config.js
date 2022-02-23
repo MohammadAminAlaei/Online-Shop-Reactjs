@@ -1,4 +1,5 @@
 export const PATHS = {
+    BASKET: '/basket',
     COMMODITY_MANAGEMENT: '/commodity-management',
     FINAL_PURCHASE: '/final-purchase',
     HOME: '/',

@@ -1,0 +1,6 @@
+{
+  "404": "Not found",
+  "500": "Server error, please try later",
+  "400": "There's a problem, please check your request payload.",
+  "connection": "You're offline, please check your connection"
+}

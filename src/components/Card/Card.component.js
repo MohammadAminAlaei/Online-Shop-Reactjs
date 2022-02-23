@@ -55,8 +55,7 @@ const CardComponent = ({img, firstName, price, brand, description, onClick}) => 
                     {brand} - {firstName}
                 </Typography>
                 <Typography variant="body" color="text.secondary">
-                    {price} تومان {description && <br/>}
-                    {description}
+                    {price} تومان
                 </Typography>
             </CardContent>
         </Card>

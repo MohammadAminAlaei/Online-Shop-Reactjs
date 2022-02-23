@@ -60,7 +60,7 @@ const HomePage = props => {
                     )}
                 </Grid>
             </Box>
-            <Button endIcon={<ArrowLeftIcon sx={{fontSize: '3rem!important'}}/>}
+            <Button onClick={e => navigate('product-list/لپتاپ')} endIcon={<ArrowLeftIcon sx={{fontSize: '3rem!important'}}/>}
                     sx={{fontSize: '1.8rem', lineHeight: '4rem', padding: '1.2rem 0', marginTop: '2rem'}}
                     size="large"> آیتم های گروه
                 لپتاپ </Button>
@@ -83,7 +83,7 @@ const HomePage = props => {
                     )}
                 </Grid>
             </Box>
-            <Button endIcon={<ArrowLeftIcon sx={{fontSize: '3rem!important'}}/>}
+            <Button onClick={e => navigate('product-list/کامپیوتر همه کاره')} endIcon={<ArrowLeftIcon sx={{fontSize: '3rem!important'}}/>}
                     sx={{fontSize: '1.8rem', lineHeight: '4rem', padding: '1.2rem 0', marginTop: '2rem'}}
                     size="large"> آیتم های گروه
                 کامپیوتر همه کاره </Button>
@@ -106,7 +106,7 @@ const HomePage = props => {
                     )}
                 </Grid>
             </Box>
-            <Button endIcon={<ArrowLeftIcon sx={{fontSize: '3rem!important'}}/>}
+            <Button onClick={e => navigate('product-list/هدفون بی سیم')} endIcon={<ArrowLeftIcon sx={{fontSize: '3rem!important'}}/>}
                     sx={{fontSize: '1.8rem', lineHeight: '4rem', padding: '1.2rem 0', marginTop: '2rem'}}
                     size="large"> آیتم های گروه
                 هدفون </Button>
