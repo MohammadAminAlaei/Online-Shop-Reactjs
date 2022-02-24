@@ -20,7 +20,7 @@ ReactDOM.render(
                     hideProgressBar={false}
                     newestOnTop={false}
                     closeOnClick
-                    rtl={false}
+                    rtl={true}
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover

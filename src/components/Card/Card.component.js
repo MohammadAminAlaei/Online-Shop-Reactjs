@@ -46,7 +46,7 @@ const CardComponent = ({img, firstName, price, brand, description, onClick}) => 
                 <CardMedia
                     component="img"
                     height="140"
-                    image={img}
+                    image={`http://localhost:3002/files/${img}`}
                     alt={brand}
                 />
             </figure>

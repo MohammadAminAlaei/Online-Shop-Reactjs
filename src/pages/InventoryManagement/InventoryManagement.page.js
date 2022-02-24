@@ -278,7 +278,8 @@ const InventoryManage = props => {
                     count: item.count
                 })
             ]).then(() => {
-                toast.success('اطلاعات با موفقیت ثبت شد')
+                item.price && toast.success(` قیمت ${item.categoryName} ${item.name} با موفقیت از ${item.previousPrice} به ${item.price} ویرایش یافت`);
+                item.count && toast.success(` موجودی ${item.categoryName} ${item.name} با موفقیت از ${item.previousCount} به ${item.count} ویرایش یافت`);
                 fetchProducts();
                 setDisplayButton('false')
                 setDisplayInputPrice([]);
@@ -336,7 +337,7 @@ const InventoryManage = props => {
                             {!!data.length ? data.map(item => (
                                 <TableRow key={item.id} hover role="checkbox" tabIndex={-1}>
                                     <TableCell sx={{width: '80%'}}>
-                                        {item.brand + ' ' + item.firstName}
+                                        {item.category.name + ' ' + item.brand + ' ' + item.firstName}
                                     </TableCell>
 
                                     <TableCell onClick={e => handlePrice_Count(e, 'price', item.id)}
@@ -351,7 +352,10 @@ const InventoryManage = props => {
                                                       placeholder={item.price}
                                                       onBlur={e => setChangePrice_Count([...changePrice_Count, {
                                                           id: item.id,
-                                                          price: e.target.value
+                                                          price: e.target.value,
+                                                          name: item.firstName,
+                                                          categoryName: item.category.name,
+                                                          previousPrice: item.price
                                                       }])}
                                         />
                                     </TableCell>
@@ -368,7 +372,10 @@ const InventoryManage = props => {
                                                       placeholder={item.count}
                                                       onBlur={e => setChangePrice_Count([...changePrice_Count, {
                                                           id: item.id,
-                                                          count: e.target.value
+                                                          count: e.target.value,
+                                                          name: item.firstName,
+                                                          categoryName: item.category.name,
+                                                          previousCount: item.count
                                                       }])}
                                         />
                                     </TableCell>

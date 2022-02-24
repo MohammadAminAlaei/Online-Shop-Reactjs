@@ -35,11 +35,11 @@ const HomePage = props => {
 
     return (
         <>
-            <Button onClick={e => navigate('product-list/گوشی مبایل')}
+            <Button onClick={e => navigate('product-list/گوشی موبایل')}
                     endIcon={<ArrowLeftIcon sx={{fontSize: '3rem!important'}}/>}
                     sx={{fontSize: '1.8rem', lineHeight: '4rem', padding: '1.2rem 0'}}
                     size="large"> آیتم های گروه
-                گوشی مبایل </Button>
+                گوشی موبایل </Button>
             <Box sx={{flexGrow: 1}}>
                 <Grid container spacing={{xs: 2, md: 4}}
                       columns={{xs: 12, sm: 8, md: 12}}>

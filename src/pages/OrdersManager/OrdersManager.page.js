@@ -511,7 +511,7 @@ const OrdersManage = props => {
                                             onChange={handleGrouping}
                                             name="category_name"
                                     >
-                                        <MenuItem value="گوشی مبایل">گوشی موبایل</MenuItem>
+                                        <MenuItem value="گوشی موبایل">گوشی موبایل</MenuItem>
                                         <MenuItem value="لپتاپ">لپتاپ</MenuItem>
                                         <MenuItem value="کامپیوتر همه کاره">کامپیوتر</MenuItem>
                                         <MenuItem value="هدفون">هدفون</MenuItem>
