@@ -10,6 +10,11 @@ import {PRODUCTS} from '../../configs/url.config';
 import {Button, TextField, Typography} from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import {MultipleImages} from 'components'
+import styles from '../../components/Card/Card.module.scss';
+import CardMedia from '@mui/material/CardMedia';
+import Backdrop from '@mui/material/Backdrop';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
 
 const useStyle = makeStyles(theme => ({
     box: {
@@ -22,8 +27,43 @@ const useStyle = makeStyles(theme => ({
         flexDirection: 'column',
         gap: '40px',
         marginTop: '10px'
+    },
+    figureGroup: {
+        display: 'flex',
+        gap: '16px',
+        margin: '1.6rem 0'
+    },
+    modalImages: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '16px',
+        justifyContent: 'center',
+        margin: '.8rem 0'
+    },
+    titleName: {
+        '&::after': {
+            content: '""',
+            display: 'block',
+            width: '100%',
+            height: '1.4px',
+            backgroundColor: '#e0e0e2',
+            marginTop: '10px'
+        }
     }
 }));
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    maxWidth: 600,
+    minWidth: 300,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 1
+};
 
 
 const Purchase = props => {
@@ -32,6 +72,15 @@ const Purchase = props => {
     const [data, setData] = useState([]);
     const [countOrder, setCountOrder] = useState(1);
     const [orders, setOrders] = useState([]);
+    const [open, setOpen] = React.useState(false);
+    const [mainImage, setMainImage] = useState('');
+
+
+    const handleOpen = (image) => {
+        setOpen(true);
+        setMainImage(image);
+    }
+    const handleClose = () => setOpen(false);
 
     useEffect(() => {
         http.get(`${PRODUCTS}/${id}`).then(res => {
@@ -65,8 +114,11 @@ const Purchase = props => {
     const handleChange = e => {
         if (e.key === '-' || e.target.value[0] === '0' || e.key === '+') {
             e.preventDefault();
+        } else if (e.target.value.length < 2 && e.key === 'Backspace') {
+            e.preventDefault();
         }
     }
+
 
     const classes = useStyle();
 
@@ -75,16 +127,22 @@ const Purchase = props => {
             <Helmet>
                 <title>فروشگاه مکتب | خرید </title>
             </Helmet>
-            <MultipleImages/>
             {!!data.length && data.map((item, index) => (
                 <div key={index}>
                     <Box className={classes.box} key={item.firstName}>
-                        <figure style={{maxWidth: '300px', maxHeight: '300px', border: '1px solid black'}}>
-                            <img style={{width: '100%', height: 'auto'}}
-                                 src={`http://localhost:3002/files/${item.image[0]}`} alt={item.image[0]}/>
-                        </figure>
+                        <Box>
+                            <figure>
+                                <CardMedia
+                                    component="img"
+                                    height="400"
+                                    image={`http://localhost:3002/files/${item.image[0]}`}
+                                    alt="test"
+                                />
+                            </figure>
+                        </Box>
                         <Box className={classes.infoBox}>
-                            <Typography variant="h5" component="h1">{item.category.name} {item.firstName} </Typography>
+                            <Typography className={classes.titleName} variant="h5"
+                                        component="h1">{item.category.name} {item.firstName} </Typography>
                             <Typography variant="h6" component="h1">برند: {item.brand} </Typography>
                             <Typography variant="h6" component="h2"> قیمت: {item.price} تومان </Typography>
                             <Box style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
@@ -109,6 +167,68 @@ const Purchase = props => {
                             </Box>
                         </Box>
                     </Box>
+                    <Box className={classes.figureGroup}>
+                        {item.image.map((image, index) => (
+                            <figure key={index} onClick={e => handleOpen(`http://localhost:3002/files/${image}`)}
+                                    style={{
+                                        width: '50px!important',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '10px',
+                                        overflow: 'hidden',
+                                        cursor: 'pointer'
+                                    }}>
+                                <CardMedia sx={{width: '70px!important'}}
+                                           component="img"
+                                           height="auto"
+                                           image={`http://localhost:3002/files/${image}`}
+                                           alt="test"
+                                />
+                            </figure>
+                        ))}
+                    </Box>
+                    <Modal
+                        aria-labelledby="transition-modal-title"
+                        aria-describedby="transition-modal-description"
+                        open={open}
+                        onClose={handleClose}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                            timeout: 500,
+                        }}
+                    >
+                        <Fade in={open}>
+                            <Box sx={style}>
+                                <figure>
+                                    <CardMedia sx={{width: '100%!important'}}
+                                               component="img"
+                                               height="auto"
+                                               image={mainImage}
+                                               alt="test"
+                                    />
+                                </figure>
+                                <Box className={classes.modalImages}>
+                                    {item.image.map((image, index) => (
+                                        <figure key={index} style={{
+                                            width: '50px!important',
+                                            borderRadius: '10px',
+                                            overflow: 'hidden',
+                                            cursor: 'pointer',
+                                            border: `http://localhost:3002/files/${image}` === mainImage ? '2px solid #3e9fd8' : '2px solid #ccc'
+                                        }}
+                                                onClick={e => setMainImage(`http://localhost:3002/files/${image}`)}>
+                                            <CardMedia sx={{width: '70px!important'}}
+                                                       component="img"
+                                                       height="auto"
+                                                       image={`http://localhost:3002/files/${image}`}
+                                                       alt="test"
+                                            />
+                                        </figure>
+                                    ))}
+                                </Box>
+                            </Box>
+                        </Fade>
+                    </Modal>
                     <Box sx={{my: 3}}>
                         <Typography dangerouslySetInnerHTML={{__html: item.description}}/>
                         <Typography sx={{lineHeight: '2rem'}}>

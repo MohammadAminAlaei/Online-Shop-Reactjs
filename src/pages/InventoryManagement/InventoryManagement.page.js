@@ -287,7 +287,8 @@ const InventoryManage = props => {
                 setChangePrice_Count([]);
             }).catch(err => {
                 console.log(err)
-                toast.error('خطا در ثبت اطلاعات')
+                item.price && toast.error(`متاسفانه ویرایش قیمت ${item.categoryName} ${item.name}  از ${item.previousPrice} به ${item.price} با مشکل مواجه شد`);
+                item.count && toast.error(`متاسفانه ویرایش موجودی ${item.categoryName} ${item.name}  از ${item.previousCount} به ${item.count} با مشکل مواجه شد`);
             });
         })
     }
