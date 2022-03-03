@@ -400,7 +400,7 @@ const CommodityManagement = () => {
                                         <span style={{fontFamily: 'Vazir-bold'}}>  زمان سفارش:</span> {item.date} <br/>
                                     </p>
                                 </article>
-                                <Paper sx={{width: '100%', overflow: 'hidden'}}>
+                                <Paper sx={{width: '100%', overflow: 'auto'}}>
                                     <TableContainer>
                                         <Table stickyHeader aria-label="sticky table">
                                             <TableHead>
@@ -425,7 +425,7 @@ const CommodityManagement = () => {
                                                 {item.orders.map((item, index) => (
                                                     <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                                         <TableCell sx={{width: '30%'}} key={item.id}>
-                                                            {item.firstName}
+                                                            {item.brand} {item.name}
                                                         </TableCell>
                                                         <TableCell sx={{width: '20%'}}>
                                                             {(item.price).toLocaleString('fa-ir')}

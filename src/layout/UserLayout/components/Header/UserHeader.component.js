@@ -135,31 +135,6 @@ const useStyles = makeStyles((theme) => ({
 function OrdersManagePage(props) {
     const classes = useStyles();
     const navigate = useNavigate();
-    const [orders, setOrders] = useState([])
-
-    useEffect(() => {
-        didMount();
-
-
-    }, []);
-    window.addEventListener('storage', e => {
-        // let targetURL = new URL(e.url);
-        // if (window.location.pathname === targetURL.pathname) {
-        setOrders(...orders, JSON.parse(e.newValue));
-        console.log(orders);
-        alert('تغییرات با موفقیت انجام شد');
-        // }
-    });
-
-
-    const didMount = () => {
-        let storage = JSON.parse(localStorage.getItem('orders'));
-        storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('orders'));
-        setOrders(storage)
-    };
-
-    console.log(props);
-    // console.log(store.getState().products)
 
     return (
         <div>

@@ -1,9 +1,14 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
 import {Helmet} from 'react-helmet';
 import {Typography} from '@mui/material';
 import Box from '@mui/material/Box';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {makeStyles} from '@mui/styles';
+import {CUSTOMERS} from 'configs/url.config';
+import http from 'services/http.service';
+import moment from 'jalali-moment';
+import store from 'redux/store';
+
 
 const useStyle = makeStyles(theme => ({
     textWidth: {
@@ -16,8 +21,63 @@ const useStyle = makeStyles(theme => ({
     }
 }));
 
+// {
+//     "name": "اکبر زمانی",
+//     "date": "1399/1/5",
+//     "status": "done",
+//     "totalAmount": "920000",
+//     "address": "تهران - انقلاب",
+//     "orders": [
+//     {
+//         "firstName": "Iphone 7Plus",
+//         "price": "100000",
+//         "count": "60"
+//     },
+//     {
+//         "firstName": "Iphone 6sPlus",
+//         "price": "80000",
+//         "count": "20"
+//     },
+//     {
+//         "firstName": "Iphone 8Plus",
+//         "price": "6000",
+//         "count": "30"
+//     }
+// ],
+//     "deliverytime": "1399/1/5",
+//     "phone": "09123456789",
+//     "id": 1
+// }
+
 
 const PaymentResultSuccess = () => {
+
+    useEffect(() => {
+        didMount()
+    }, []);
+
+    const didMount = () => {
+
+        const storageDataCustomer = JSON.parse(localStorage.getItem('CUSTOMER_INFO'));
+        const storageDataOrders = JSON.parse(localStorage.getItem('orders'));
+
+        const data = {
+            'name': storageDataCustomer.firstName + ' ' + storageDataCustomer.lastName,
+            'date': moment().locale('fa').format('YYYY/MM/DD'),
+            'status': 'doing',
+            'address': storageDataCustomer.address,
+            'totalAmount': storageDataOrders.reduce((total, item) => total + item.price * item.count, 0),
+            'orders': storageDataOrders,
+            'deliverytime': storageDataCustomer.date,
+            'phone': storageDataCustomer.phoneNumber,
+        }
+
+        http.post(CUSTOMERS, data).then(res => {
+            localStorage.setItem('CUSTOMER_INFO', JSON.stringify({}));
+            localStorage.setItem('orders', JSON.stringify([]));
+            store.dispatch({type: 'ORDERS_ZERO'});
+        })
+    }
 
     const classes = useStyle();
 

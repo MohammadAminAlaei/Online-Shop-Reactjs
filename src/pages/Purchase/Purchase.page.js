@@ -77,11 +77,8 @@ const Purchase = props => {
     const [countOrder, setCountOrder] = useState(1);
     const [open, setOpen] = React.useState(false);
     const [mainImage, setMainImage] = useState('');
-    const dispatch = useDispatch();
 
-    console.log(store);
-
-
+    
     const handleOpen = (image) => {
         setOpen(true);
         setMainImage(image);
@@ -93,15 +90,6 @@ const Purchase = props => {
             setData([...data, res.data]);
             didMount();
         });
-
-        // window.addEventListener('storage', e => {
-        //     alert('hello');
-        //     console.log(e)
-        // });
-        //
-        // return () => {
-        //     !!window.onstorage && alert('hello')
-        // }
     }, [id]);
 
     const didMount = () => {

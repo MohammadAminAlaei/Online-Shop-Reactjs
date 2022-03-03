@@ -11,6 +11,8 @@ const OrdersReducer = (state = initialState, action) => {
             return state + 1;
         case 'ORDERS_DECREMENT':
             return state - 1;
+        case 'ORDERS_ZERO':
+            return state = 0;
         default:
             return state;
     }
