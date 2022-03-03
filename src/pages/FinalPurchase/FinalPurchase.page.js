@@ -1,8 +1,14 @@
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
 import {Helmet} from 'react-helmet';
-import {Button, TextareaAutosize, TextField, Typography} from '@mui/material';
+import {Button, TextField, Typography} from '@mui/material';
 import Box from '@mui/material/Box';
 import {makeStyles} from '@mui/styles';
+import moment from 'jalali-moment'
+import AdapterJalali from '@date-io/date-fns-jalali';
+import DatePicker from '@mui/lab/DatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import {toast} from 'react-toastify';
+
 
 const useStyle = makeStyles(theme => ({
     form: {
@@ -28,11 +34,48 @@ const useStyle = makeStyles(theme => ({
             width: '100%',
             margin: '0!important',
         },
+    },
+    inputDate: {
+        width: '100%!important',
     }
 }));
 
 
 const FinalPurchase = () => {
+
+    const [date, setDate] = React.useState(moment().format('jYYYY/jMM/jDD'));
+    const [value, setValue] = React.useState(new Date());
+
+
+    useEffect(() => {
+        didMount();
+    }, []);
+
+    const didMount = () => {
+        let d = new Date();
+        d.setDate(d.getDate() + 8);
+
+        setDate(moment(d, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'))
+    };
+
+
+    const handleSubmit = e => {
+        e.preventDefault();
+        let d = new Date();
+        d.setDate(d.getDate());
+        if (value < d) {
+            toast.warning('تاریخ باید 1 روز بعد از تاریخ امروز باشد');
+            return;
+        }
+        const form = new FormData(e.target);
+        let data = Object.fromEntries(form);
+        const dataToSend = {
+            ...data,
+            date: moment(value, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')
+        };
+        localStorage.setItem('CUSTOMER_INFO', JSON.stringify(dataToSend));
+        window.location.href = 'http://localhost:3001/';
+    };
 
 
     const classes = useStyle();
@@ -44,7 +87,7 @@ const FinalPurchase = () => {
             </Helmet>
             <Typography sx={{fontFamily: 'Vazir-bold'}} variant="h4" component="h3"> نهایی کردن
                 خرید </Typography>
-            <form className={classes.form}>
+            <form onSubmit={handleSubmit} className={classes.form}>
                 <Box className={classes.box}>
                     <TextField
                         id="outlined-basic"
@@ -52,12 +95,14 @@ const FinalPurchase = () => {
                         variant="outlined"
                         fullWidth
                         name="firstName"
+                        required
                     /> <TextField
                     id="outlined-basic"
                     label="نام خانوادگی:"
                     variant="outlined"
                     fullWidth
                     name="lastName"
+                    required
                 />
                 </Box>
                 <Box className={classes.box}>
@@ -69,6 +114,7 @@ const FinalPurchase = () => {
                         variant="outlined"
                         fullWidth
                         name="address"
+                        required
                     />
                     <TextField
                         id="outlined-basic"
@@ -77,22 +123,26 @@ const FinalPurchase = () => {
                         fullWidth
                         name="phoneNumber"
                         type="number"
+                        required
                     />
                 </Box>
                 <Box className={classes.box}>
-                    <TextField
-                        id="datetime-local"
-                        label="تاریخ تحویل"
-                        type="datetime-local"
-                        sx={{width: '100%'}}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        name="date"
-                    />
+                    <LocalizationProvider dateAdapter={AdapterJalali}>
+                        <DatePicker
+                            required
+                            mask="____/__/__"
+                            label=" تاریخ تحویل:"
+                            value={value}
+                            onChange={(newValue) => setValue(newValue)}
+                            renderInput={(params) => <TextField {...params} />}
+                            name="date"/>
+                    </LocalizationProvider>
                     <div style={{width: '100%'}}/>
                 </Box>
-                <Button className={classes.button} variant="contained" color="success"> پرداخت </Button>
+                <Button type="submit"
+                        className={classes.button}
+                        variant="contained"
+                        color="success"> پرداخت </Button>
             </form>
         </>
     );

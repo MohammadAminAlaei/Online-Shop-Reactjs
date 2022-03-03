@@ -10,8 +10,8 @@
         "658b403da7012581a05a01f5968703bd"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "1550",
-      "count": "20",
+      "price": "800",
+      "count": "80",
       "createdAt": 1645637101787,
       "description": "<p>test</p>",
       "category": {
@@ -31,7 +31,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "100",
-      "count": "100",
+      "count": "50",
       "createdAt": 1644277786965,
       "description": "test",
       "category": {
@@ -530,23 +530,6 @@
         "icon": "65ddd8b1bbce4d8396b62611147fa1d6"
       },
       "id": 32
-    },
-    {
-      "firstName": "1",
-      "brand": "1",
-      "image": [
-        "427922c70fec3cebe55dbeb8858b4575"
-      ],
-      "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "50",
-      "count": "50",
-      "createdAt": 1645638470869,
-      "description": "",
-      "category": {
-        "name": "لپتاپ",
-        "icon": "65ddd8b1bbce4d8396b62611147fa1d6"
-      },
-      "id": 33
     }
   ],
   "category": [

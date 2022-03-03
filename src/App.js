@@ -3,7 +3,8 @@ import {CacheProvider} from '@emotion/react';
 import createCache from '@emotion/cache';
 import {prefixer} from 'stylis';
 import {ThemeProvider} from '@mui/material/styles';
-import {theme} from './assets/CustomTheme.mui'
+import {theme} from './assets/CustomTheme.mui';
+
 
 // Create rtl cache
 const cacheRtl = createCache({

@@ -39,7 +39,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import parse from 'html-react-parser';
 import {toast} from 'react-toastify';
 import CardMedia from '@mui/material/CardMedia';
-import styles from './OrdersManager.module.scss'
+import styles from './OrdersManager.module.scss';
+import {PersianNumber} from 'components'
 
 
 const StyledButton = styled('button')`
@@ -456,16 +457,16 @@ const OrdersManage = props => {
                     <Button onClick={e => handleModal(null, 'add')} className={classes.button} color="success"
                             variant="contained"> افزودن
                         کالا </Button>
-                    <Modal
-                        aria-labelledby="transition-modal-title"
-                        aria-describedby="transition-modal-description"
-                        open={open}
-                        onClose={handleClose}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                            timeout: 500,
-                        }}>
+                    <Modal sx={{overflow: 'auto'}}
+                           aria-labelledby="transition-modal-title"
+                           aria-describedby="transition-modal-description"
+                           open={open}
+                           onClose={handleClose}
+                           closeAfterTransition
+                           BackdropComponent={Backdrop}
+                           BackdropProps={{
+                               timeout: 500,
+                           }}>
                         <Fade in={open}>
                             <Box className={classes.modalBox}>
                                 <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -598,10 +599,11 @@ const OrdersManage = props => {
                                             </figure>
                                         </TableCell>
                                         <TableCell key={item.key}>
-                                            {item.firstName}
+                                            <PersianNumber number={item.firstName}/>
                                         </TableCell>
                                         <TableCell key={item.key}>
-                                            {item.category.name} / {item.brand}
+                                            <PersianNumber number={item.category.name}/> /
+                                            &nbsp;<PersianNumber number={item.brand}/>
                                         </TableCell>
                                         <TableCell key={item.key}>
                                             <Box sx={{display: 'flex', gap: '10px'}}>

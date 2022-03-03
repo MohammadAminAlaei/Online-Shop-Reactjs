@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {makeStyles} from '@mui/styles';
 import styles from './Card.module.scss';
+import {PersianNumber} from 'components';
 
 const useStyle = makeStyles(theme => ({
     mainCard: {
@@ -55,7 +56,7 @@ const CardComponent = ({img, firstName, price, brand, description, onClick}) => 
                     {brand} - {firstName}
                 </Typography>
                 <Typography variant="body" color="text.secondary">
-                    {price} تومان
+                    <PersianNumber number={price}/> تومان
                 </Typography>
             </CardContent>
         </Card>

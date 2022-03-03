@@ -8,8 +8,6 @@ import http from 'services/http.service';
 import {PRODUCTS} from '../../configs/url.config';
 import Grid from '@mui/material/Grid';
 import {AppPagination, CardComponent} from 'components';
-import {ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarContent, SidebarFooter} from 'react-pro-sidebar';
-import 'react-pro-sidebar/dist/css/styles.css';
 import {Link} from 'react-router-dom';
 import {PATHS} from '../../configs/routes.config';
 import PropTypes from 'prop-types';
@@ -45,7 +43,7 @@ const StyledButton = styled('button')(
   font-size: 0.875rem;
   box-sizing: border-box;
   min-height: calc(1.5em + 22px);
-  min-width: 320px;
+  min-width: 220px;
   background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
   border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
   border-radius: 0.75em;
@@ -84,7 +82,7 @@ const StyledListbox = styled('ul')(
   box-sizing: border-box;
   padding: 5px;
   margin: 10px 0;
-  min-width: 320px;
+  min-width: 285px;
   background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
   border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[300]};
   border-radius: 0.75em;
@@ -167,10 +165,11 @@ const useStyle = makeStyles(theme => ({
         flexDirection: 'column',
         minWidth: '300px',
         minHeight: '100vh',
-        backgroundColor: '#c9daff42',
+        backgroundColor: '#eef3fe',
         borderLeft: '1px solid #e0e0e0',
         justifyContent: 'flex-start',
         textAlign: 'right',
+        zIndex: 99,
         [theme.breakpoints.down('sm')]: {
             maxHeight: 'max-content!important',
         }

@@ -7,7 +7,8 @@ export const PATHS = {
     LOGIN_PANEL_MANAGEMENT: '/login-panel-management',
     MAC_PAYMENT: '/mac-payment',
     ORDERS_MANAGER: '/orders-manager',
-    PAYMENT_RESULT: '/payment-result',
+    PAYMENT_RESULT_FAILED: '/payment-result-failed',
+    PAYMENT_RESULT_SUCCESS: '/payment-result-success',
     PRODUCT_LIST: '/product-list/:group',
     PURCHASE: '/purchase/:id',
 }

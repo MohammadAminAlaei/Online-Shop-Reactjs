@@ -15,6 +15,10 @@ import CardMedia from '@mui/material/CardMedia';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
+import {useSelector, useDispatch, connect} from 'react-redux';
+import store from 'redux/store';
+import {getProduct} from '../../redux/actions/products.action';
+
 
 const useStyle = makeStyles(theme => ({
     box: {
@@ -71,9 +75,11 @@ const Purchase = props => {
     const {id} = useParams();
     const [data, setData] = useState([]);
     const [countOrder, setCountOrder] = useState(1);
-    const [orders, setOrders] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [mainImage, setMainImage] = useState('');
+    const dispatch = useDispatch();
+
+    console.log(store);
 
 
     const handleOpen = (image) => {
@@ -85,34 +91,42 @@ const Purchase = props => {
     useEffect(() => {
         http.get(`${PRODUCTS}/${id}`).then(res => {
             setData([...data, res.data]);
-            // didMount();
+            didMount();
         });
+
+        // window.addEventListener('storage', e => {
+        //     alert('hello');
+        //     console.log(e)
+        // });
+        //
+        // return () => {
+        //     !!window.onstorage && alert('hello')
+        // }
     }, [id]);
 
-    // const didMount = () => {
-    //     let storage = JSON.parse(localStorage.getItem('orders'));
-    //     storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('orders'));
-    //     setOrders(storage);
-    //     localStorage.setItem('orders', JSON.stringify(orders));
-    // }
-    //
-    // const handleAddOrder = e => {
-    //     let storage = JSON.parse(localStorage.getItem('orders'));
-    //     console.log(storage)
-    //
-    //
-    //     const order = {
-    //         count: countOrder,
-    //         name: data[0].firstName,
-    //         brand: data[0].brand,
-    //         price: data[0].price,
-    //     }
-    //
-    //     localStorage.setItem('orders', [...storage, JSON.stringify(order)]);
-    // }
+    const didMount = () => {
+        let storage = JSON.parse(localStorage.getItem('orders'));
+        storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('orders'));
+        localStorage.setItem('orders', JSON.stringify(storage));
+    }
+
+    const handleAddOrder = e => {
+        let storage = JSON.parse(localStorage.getItem('orders'));
+
+
+        const order = {
+            count: countOrder,
+            name: data[0].firstName,
+            brand: data[0].brand,
+            price: data[0].price,
+        }
+
+        localStorage.setItem('orders', JSON.stringify([...storage, order]));
+        store.dispatch({type: 'ORDERS_INCREMENT'});
+    }
 
     const handleChange = e => {
-        if (e.key === '-' || e.target.value[0] === '0' || e.key === '+') {
+        if (e.key === '-' || e.target.value[0] === '0' || e.key === '+' || e.key === '*' || e.key === '/') {
             e.preventDefault();
         } else if (e.target.value.length < 2 && e.key === 'Backspace') {
             e.preventDefault();
@@ -158,7 +172,7 @@ const Purchase = props => {
                                            }}
                                            onChange={e => setCountOrder(e.target.value)}
                                 />
-                                <Button onClick={e => alert('handleAddOrder')} endIcon={<AddCircleIcon/>}
+                                <Button onClick={handleAddOrder} endIcon={<AddCircleIcon/>}
                                         sx={{width: '200px', height: '46px'}}
                                         variant="contained"
                                         color="success"> افزودن
@@ -246,7 +260,8 @@ const Purchase = props => {
             ))}
         </>
     );
-}
+
+};
 
 
 export {Purchase};

@@ -19,6 +19,10 @@ import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
 import {useNavigate} from 'react-router-dom';
 import {PATHS} from '../../../../configs/routes.config';
+import store from 'redux/store';
+import {Purchase} from '../../../../pages';
+import {getProduct} from '../../../../redux/actions/products.action';
+import {connect} from 'react-redux';
 
 
 ScrollTop.propTypes = {children: PropTypes.node};
@@ -128,20 +132,34 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function HeaderUser(props) {
+function OrdersManagePage(props) {
     const classes = useStyles();
     const navigate = useNavigate();
     const [orders, setOrders] = useState([])
 
     useEffect(() => {
-        // didMount()
-    }, []);
+        didMount();
 
-    // const didMount = () => {
-    //     let storage = JSON.parse(localStorage.getItem('orders'));
-    //     storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('orders'));
-    //     setOrders(storage)
-    // };
+
+    }, []);
+    window.addEventListener('storage', e => {
+        // let targetURL = new URL(e.url);
+        // if (window.location.pathname === targetURL.pathname) {
+        setOrders(...orders, JSON.parse(e.newValue));
+        console.log(orders);
+        alert('تغییرات با موفقیت انجام شد');
+        // }
+    });
+
+
+    const didMount = () => {
+        let storage = JSON.parse(localStorage.getItem('orders'));
+        storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('orders'));
+        setOrders(storage)
+    };
+
+    console.log(props);
+    // console.log(store.getState().products)
 
     return (
         <div>
@@ -149,7 +167,8 @@ function HeaderUser(props) {
                 <Toolbar sx={{padding: '0!important'}}>
                     <Container className={classes.containerPadding}>
                         <Box className={classes.main_header}>
-                            <Box className={classes.box_header}>
+                            <Box className={classes.box_header} onClick={e => navigate(PATHS.HOME)}
+                                 sx={{cursor: 'pointer'}}>
                                 <figure>
                                     <CardMedia
                                         component="img"
@@ -157,18 +176,21 @@ function HeaderUser(props) {
                                         image={image}
                                         alt="آیکون فروشگاه"/>
                                 </figure>
-                                <Typography className={classes.title} component="h1" variant="h1">
+                                <Typography className={classes.title} component="h1"
+                                            variant="h1">
                                     فروشگاه مکتب
                                 </Typography>
                             </Box>
                             <Box className={classes.buttons}>
                                 <Button onClick={e => navigate(PATHS.LOGIN_PANEL_MANAGEMENT)}
                                         className={classes.button}>مدیریت</Button>
-                                <Button startIcon={<Badge color="error" badgeContent={orders.length}>
-                                    <ShoppingCartIcon className={classes.iconSize}/> </Badge>}
-                                        className={classes.button}
-                                        variant="text"
-                                        onClick={e => navigate(PATHS.BASKET)}
+                                <Button
+                                    startIcon={<Badge color="error"
+                                                      badgeContent={props.ordersLength}>
+                                        <ShoppingCartIcon className={classes.iconSize}/> </Badge>}
+                                    className={classes.button}
+                                    variant="text"
+                                    onClick={e => navigate(PATHS.BASKET)}
                                 >سبد خرید</Button>
                             </Box>
                         </Box>
@@ -188,6 +210,14 @@ function HeaderUser(props) {
             </ScrollTop>
         </div>
     );
-}
+};
+
+const mapStateToProps = (state) => {
+    return {
+        ordersLength: state.ordersLength
+    }
+};
+
+const HeaderUser = connect(mapStateToProps, undefined)(OrdersManagePage);
 
 export {HeaderUser};

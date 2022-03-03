@@ -2,6 +2,7 @@ import * as React from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import {makeStyles} from '@mui/styles';
+import {PersianNumber} from 'components';
 
 const useStyle = makeStyles(theme => ({
     root: {
@@ -23,7 +24,25 @@ const useStyle = makeStyles(theme => ({
         alignItems: 'center',
         color: 'white',
     }
-}))
+}));
+
+const arabicNumbers = '۰۱۲۳۴۵۶۷۸۹'
+
+function convertNumberToLetter(num) {
+    let result = ''
+    const str = num.toString();
+    for (let c of str) {
+        result += arabicNumbers.charAt(c)
+    }
+    return result
+}
+
+function itemRender(current, type, originalElement) {
+    if (type === 'page') {
+        return <a>{convertNumberToLetter(current)}</a>;
+    }
+    return originalElement;
+}
 
 
 const AppPagination = ({setPage, pageNumber}) => {
@@ -39,11 +58,11 @@ const AppPagination = ({setPage, pageNumber}) => {
         <div className={classes.container}>
             <div className={classes.root}>
                 <Stack>
-                    <Pagination
-                        onChange={e => handleChange(e.target.textContent)}
-                        count={pageNumber}
-                        showFirstButton
-                        showLastButton/>
+                    <Pagination itemRender={itemRender}
+                                onChange={e => handleChange(e.target.textContent)}
+                                count={pageNumber}
+                                showFirstButton
+                                showLastButton/>
                 </Stack>
             </div>
         </div>
