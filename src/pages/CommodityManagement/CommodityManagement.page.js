@@ -33,6 +33,8 @@ import Fade from '@mui/material/Fade';
 import HighlightOffTwoToneIcon from '@mui/icons-material/HighlightOffTwoTone';
 import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {toast} from 'react-toastify';
+import moment from 'jalali-moment';
 
 const style = {
     position: 'absolute',
@@ -279,6 +281,22 @@ const CommodityManagement = () => {
         await http.get(CUSTOMERS).then(res => {
             setNumberOfPages(res.headers['x-total-count']);
         });
+        didMount();
+    };
+
+    const didMount = () => {
+        const todayDate = moment().locale('fa').format('YYYY/MM/DD');
+
+        http.get(`${CUSTOMERS}?date=${todayDate}`).then(res => {
+            if (res.data === []) return;
+            res.data.forEach(item => {
+                if (item.status === 'doing') {
+                    http.patch(`${CUSTOMERS}/${item.id}`, {status: 'done'}).then(res => {
+                        fetchProducts();
+                    })
+                }
+            })
+        });
     };
 
 
@@ -288,6 +306,24 @@ const CommodityManagement = () => {
     const handleChange = (event) => {
         setValue(event.target.value);
     };
+
+    const handleChangeStatus = (id, status) => {
+
+        if (status === 'doing') {
+            http.patch(`${CUSTOMERS}/${id}`, {status: 'done'}).then(res => {
+                fetchProducts();
+                toast.success('وضعیت سفارش با موفقیت تغییر یافت');
+            });
+        } else {
+            http.patch(`${CUSTOMERS}/${id}`, {status: 'doing'}).then(res => {
+                fetchProducts();
+                toast.success('وضعیت سفارش با موفقیت تغییر یافت');
+            });
+        }
+
+        handleClose()
+
+    }
 
     const skeletonCount = [1, 2, 3, 4, 5]
 
@@ -447,10 +483,10 @@ const CommodityManagement = () => {
                             </Box>
                         ))}
                         {!!dataModal.length && dataModal[0].status === 'done' ? (
-
-                            <Button onClick={handleClose} color="success" type="submit" variant="contained"> تحویل داده
-                                شد </Button>
-                        ) : <p style={{textAlign: 'center'}}> زمان تحویل: بزودی </p>}
+                            <Button onClick={e => handleChangeStatus(dataModal[0].id, 'done')} color="warning"
+                                    variant="contained"> تغیر وضعیت به سفارش های درحال انتظار </Button>
+                        ) : <Button onClick={e => handleChangeStatus(dataModal[0].id, 'doing')} color="success"
+                                    variant="contained"> تغیر وضعیت به سفارش های تحویل داده شده </Button>}
                     </Box>
                 </Fade>
             </Modal>
@@ -460,8 +496,4 @@ const CommodityManagement = () => {
     );
 }
 
-export
-{
-    CommodityManagement
-}
-    ;
+export {CommodityManagement};

@@ -561,7 +561,7 @@
     {
       "name": "test test",
       "date": "1400/12/13",
-      "status": "doing",
+      "status": "done",
       "address": "test",
       "totalAmount": "920000",
       "orders": [
@@ -634,7 +634,7 @@
     {
       "name": "amin aelaei",
       "date": "1400/12/13",
-      "status": "doing",
+      "status": "done",
       "address": "tehran ray",
       "totalAmount": 6400,
       "orders": [
@@ -695,7 +695,7 @@
     {
       "name": "again again",
       "date": "1400/12/13",
-      "status": "doing",
+      "status": "done",
       "address": " test",
       "totalAmount": 8800,
       "orders": [
@@ -774,7 +774,7 @@
     {
       "name": "aaaaa aaaaa",
       "date": "1400/12/13",
-      "status": "doing",
+      "status": "done",
       "address": "aaaaaaa",
       "totalAmount": 4800,
       "orders": [
