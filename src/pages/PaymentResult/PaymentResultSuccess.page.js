@@ -21,34 +21,6 @@ const useStyle = makeStyles(theme => ({
     }
 }));
 
-// {
-//     "name": "اکبر زمانی",
-//     "date": "1399/1/5",
-//     "status": "done",
-//     "totalAmount": "920000",
-//     "address": "تهران - انقلاب",
-//     "orders": [
-//     {
-//         "firstName": "Iphone 7Plus",
-//         "price": "100000",
-//         "count": "60"
-//     },
-//     {
-//         "firstName": "Iphone 6sPlus",
-//         "price": "80000",
-//         "count": "20"
-//     },
-//     {
-//         "firstName": "Iphone 8Plus",
-//         "price": "6000",
-//         "count": "30"
-//     }
-// ],
-//     "deliverytime": "1399/1/5",
-//     "phone": "09123456789",
-//     "id": 1
-// }
-
 
 const PaymentResultSuccess = () => {
 

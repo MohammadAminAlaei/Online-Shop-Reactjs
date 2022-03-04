@@ -69,6 +69,11 @@ const FinalPurchase = () => {
         }
         const form = new FormData(e.target);
         let data = Object.fromEntries(form);
+
+        if (data.phoneNumber.length < 11) {
+            toast.warning('شماره تلفن باید 11 رقم باشد');
+            return;
+        }
         const dataToSend = {
             ...data,
             date: moment(value, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')

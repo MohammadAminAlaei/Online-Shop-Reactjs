@@ -20,7 +20,7 @@ import axios from 'axios';
 import http from 'services/http.service';
 import {styled} from '@mui/material/styles';
 import {tableCellClasses} from '@mui/material/TableCell';
-import {AppPagination, InputChanger} from 'components';
+import {AppPagination, InputChanger, PersianNumber} from 'components';
 import {PRODUCTS} from '../../configs/url.config';
 import PropTypes from 'prop-types';
 import SelectUnstyled, {selectUnstyledClasses} from '@mui/base/SelectUnstyled';
@@ -229,6 +229,10 @@ const InventoryManage = props => {
                 setDisplayInputPrice([]);
                 setDisplayInputCount([]);
                 setChangePrice_Count([]);
+                document.querySelectorAll('input').forEach(item => {
+                    item.value = ''
+                })
+
             }
         })
     }
@@ -285,6 +289,9 @@ const InventoryManage = props => {
                 setDisplayInputPrice([]);
                 setDisplayInputCount([]);
                 setChangePrice_Count([]);
+                document.querySelectorAll('input').forEach(item => {
+                    item.value = ''
+                })
             }).catch(err => {
                 console.log(err)
                 item.price && toast.error(`متاسفانه ویرایش قیمت ${item.categoryName} ${item.name}  از ${item.previousPrice} به ${item.price} با مشکل مواجه شد`);
@@ -347,7 +354,7 @@ const InventoryManage = props => {
                                             style={{
                                                 display: !!displayInputPrice.length && displayInputPrice.includes(item.id) ? 'none' : 'block',
                                                 fontFamily: 'Vazir-bold'
-                                            }}> {item.price} </span>
+                                            }}> <PersianNumber number={item.price}/> </span>
                                         <InputChanger type="number"
                                                       style={{display: !!displayInputPrice.length && displayInputPrice.includes(item.id) ? 'block' : 'none'}}
                                                       placeholder={item.price}
@@ -367,7 +374,7 @@ const InventoryManage = props => {
                                             style={{
                                                 display: !!displayInputCount.length && displayInputCount.includes(item.id) ? 'none' : 'block',
                                                 fontFamily: 'Vazir-bold'
-                                            }}> {item.count} </span>
+                                            }}> <PersianNumber number={item.count}/> </span>
                                         <InputChanger type="number"
                                                       style={{display: !!displayInputCount.length && displayInputCount.includes(item.id) ? 'block' : 'none'}}
                                                       placeholder={item.count}
