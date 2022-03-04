@@ -287,7 +287,7 @@ const CommodityManagement = () => {
     const didMount = () => {
         const todayDate = moment().locale('fa').format('YYYY/MM/DD');
 
-        http.get(`${CUSTOMERS}?date=${todayDate}`).then(res => {
+        http.get(`${CUSTOMERS}?deliverytime=${todayDate}`).then(res => {
             if (res.data === []) return;
             res.data.forEach(item => {
                 if (item.status === 'doing') {

@@ -561,7 +561,7 @@
     {
       "name": "test test",
       "date": "1400/12/13",
-      "status": "done",
+      "status": "doing",
       "address": "test",
       "totalAmount": "920000",
       "orders": [
@@ -634,7 +634,7 @@
     {
       "name": "amin aelaei",
       "date": "1400/12/13",
-      "status": "done",
+      "status": "doing",
       "address": "tehran ray",
       "totalAmount": 6400,
       "orders": [
