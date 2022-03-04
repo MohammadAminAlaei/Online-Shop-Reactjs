@@ -18,6 +18,7 @@ import Fade from '@mui/material/Fade';
 import {useSelector, useDispatch, connect} from 'react-redux';
 import store from 'redux/store';
 import {getProduct} from '../../redux/actions/products.action';
+import {toast} from 'react-toastify';
 
 
 const useStyle = makeStyles(theme => ({
@@ -78,7 +79,7 @@ const Purchase = props => {
     const [open, setOpen] = React.useState(false);
     const [mainImage, setMainImage] = useState('');
 
-    
+
     const handleOpen = (image) => {
         setOpen(true);
         setMainImage(image);
@@ -111,6 +112,7 @@ const Purchase = props => {
 
         localStorage.setItem('orders', JSON.stringify([...storage, order]));
         store.dispatch({type: 'ORDERS_INCREMENT'});
+        toast.success('کالا با موفقیت به سبد خرید اضافه شد.');
     }
 
     const handleChange = e => {

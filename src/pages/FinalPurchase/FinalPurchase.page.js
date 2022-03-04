@@ -61,19 +61,42 @@ const FinalPurchase = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
+        const form = new FormData(e.target);
+        let data = Object.fromEntries(form);
+
+
+        if (data.firstName === '') {
+            toast.error('وارد کردن نام اجباری می باشد');
+            document.querySelector('input[name=\'firstName\']').focus();
+            return;
+        }
+
+        if (data.lastName === '') {
+            toast.error('وارد کردن نام خانوادگی اجباری می باشد');
+            document.querySelector('input[name=\'lastName\']').focus();
+            return;
+        }
+
+        if (data.address === '') {
+            toast.error('وارد کردن آدرس اجباری می باشد');
+            document.querySelector('input[name=\'address\']').focus();
+            return;
+        }
+
+        if (data.phoneNumber.length < 11) {
+            toast.warning('شماره تلفن باید 11 رقم باشد');
+            document.querySelector('input[name=\'phoneNumber\']').focus();
+            return;
+        }
+
         let d = new Date();
         d.setDate(d.getDate());
         if (value < d) {
             toast.warning('تاریخ باید 1 روز بعد از تاریخ امروز باشد');
             return;
         }
-        const form = new FormData(e.target);
-        let data = Object.fromEntries(form);
 
-        if (data.phoneNumber.length < 11) {
-            toast.warning('شماره تلفن باید 11 رقم باشد');
-            return;
-        }
+
         const dataToSend = {
             ...data,
             date: moment(value, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')
@@ -100,14 +123,12 @@ const FinalPurchase = () => {
                         variant="outlined"
                         fullWidth
                         name="firstName"
-                        required
                     /> <TextField
                     id="outlined-basic"
                     label="نام خانوادگی:"
                     variant="outlined"
                     fullWidth
                     name="lastName"
-                    required
                 />
                 </Box>
                 <Box className={classes.box}>
@@ -119,7 +140,6 @@ const FinalPurchase = () => {
                         variant="outlined"
                         fullWidth
                         name="address"
-                        required
                     />
                     <TextField
                         id="outlined-basic"
@@ -128,13 +148,11 @@ const FinalPurchase = () => {
                         fullWidth
                         name="phoneNumber"
                         type="number"
-                        required
                     />
                 </Box>
                 <Box className={classes.box}>
                     <LocalizationProvider dateAdapter={AdapterJalali}>
                         <DatePicker
-                            required
                             mask="____/__/__"
                             label=" تاریخ تحویل:"
                             value={value}

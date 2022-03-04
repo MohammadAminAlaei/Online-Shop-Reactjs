@@ -226,7 +226,7 @@ const columns = [
     {id: 'totalAmount', label: 'مجموع مبلغ', minWidth: 100},
     {
         id: 'date',
-        label: 'زمان سفارش',
+        label: 'تاریخ تحویل سفارش',
         minWidth: 170,
         format: (value) => value.toLocaleString('fa-IR'),
     },
@@ -276,7 +276,7 @@ const CommodityManagement = () => {
 
     // FETCH PRODUCTS
     const fetchProducts = async () => {
-        const {data} = await http.get(`${CUSTOMERS}?status=${value}`);
+        const {data} = await http.get(`${CUSTOMERS}?status=${value}&_sort=deliverytime&_order=desc`);
         setData(data);
         await http.get(CUSTOMERS).then(res => {
             setNumberOfPages(res.headers['x-total-count']);
@@ -373,7 +373,7 @@ const CommodityManagement = () => {
                                         {(item.totalAmount).toLocaleString('fa-ir')}
                                     </TableCell>
                                     <TableCell sx={{width: '40%'}}>
-                                        {item.date}
+                                        {item.deliverytime}
                                     </TableCell>
                                     <TableCell>
                                         <Box sx={{display: 'flex', gap: '10px'}}>
