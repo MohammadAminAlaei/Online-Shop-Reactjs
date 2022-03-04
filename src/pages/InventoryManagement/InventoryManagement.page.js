@@ -257,7 +257,6 @@ const InventoryManage = props => {
 
     const handleSave = e => {
 
-
         changePrice_Count.forEach(item => {
 
             // Promise.allSettled([
