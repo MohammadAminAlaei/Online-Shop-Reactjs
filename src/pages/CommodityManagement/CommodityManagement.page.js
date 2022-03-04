@@ -281,23 +281,23 @@ const CommodityManagement = () => {
         await http.get(CUSTOMERS).then(res => {
             setNumberOfPages(res.headers['x-total-count']);
         });
-        didMount();
+        // didMount();
     };
 
-    const didMount = () => {
-        const todayDate = moment().locale('fa').format('YYYY/MM/DD');
-
-        http.get(`${CUSTOMERS}?deliverytime=${todayDate}`).then(res => {
-            if (res.data === []) return;
-            res.data.forEach(item => {
-                if (item.status === 'doing') {
-                    http.patch(`${CUSTOMERS}/${item.id}`, {status: 'done'}).then(res => {
-                        fetchProducts();
-                    })
-                }
-            })
-        });
-    };
+    // const didMount = () => {
+    //     const todayDate = moment().locale('fa').format('YYYY/MM/DD');
+    //
+    //     http.get(`${CUSTOMERS}?deliverytime=${todayDate}`).then(res => {
+    //         if (res.data === []) return;
+    //         res.data.forEach(item => {
+    //             if (item.status === 'doing') {
+    //                 http.patch(`${CUSTOMERS}/${item.id}`, {status: 'done'}).then(res => {
+    //                     fetchProducts();
+    //                 })
+    //             }
+    //         })
+    //     });
+    // };
 
 
     const classes = useStyle();
