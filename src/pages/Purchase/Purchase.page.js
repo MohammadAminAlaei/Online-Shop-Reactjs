@@ -120,8 +120,17 @@ const Purchase = props => {
             e.preventDefault();
         } else if (e.target.value.length < 2 && e.key === 'Backspace') {
             e.preventDefault();
+        } else if (e.target.value.length === 0 && e.key === '0' || e.key === '.') {
+            e.preventDefault();
         }
-    }
+    };
+
+    const handleChangeCount = (e, count) => {
+        setCountOrder(e.target.value);
+        if (e.target.value > count) {
+            e.target.value = count;
+        }
+    };
 
 
     const classes = useStyle();
@@ -160,7 +169,7 @@ const Purchase = props => {
                                                    onKeyPress: handleChange
                                                },
                                            }}
-                                           onChange={e => setCountOrder(e.target.value)}
+                                           onChange={e => handleChangeCount(e, +item.count)}
                                 />
                                 <Button onClick={handleAddOrder} endIcon={<AddCircleIcon/>}
                                         sx={{width: '200px', height: '46px'}}
