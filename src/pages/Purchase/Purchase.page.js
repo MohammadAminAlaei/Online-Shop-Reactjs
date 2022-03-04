@@ -108,6 +108,8 @@ const Purchase = props => {
             name: data[0].firstName,
             brand: data[0].brand,
             price: data[0].price,
+            image: data[0].image[0],
+            orderId: data[0].id
         }
 
         localStorage.setItem('orders', JSON.stringify([...storage, order]));

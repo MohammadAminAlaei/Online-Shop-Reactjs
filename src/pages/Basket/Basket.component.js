@@ -31,18 +31,27 @@ import store from '../../redux/store';
 const useStyle = makeStyles(theme => ({}));
 
 const columns = [
-    {id: 'order', label: 'کالا', minWidth: 170},
-    {id: 'price', label: 'قیمت', minWidth: 100},
+    {id: 'image', label: 'تصویر'},
+    {id: 'order', label: 'کالا'},
+    {id: 'price', label: 'قیمت'},
     {
         id: 'count',
         label: 'تعداد',
-        minWidth: 170,
+        format: (value) => value.toLocaleString('fa-IR'),
+    },
+    {
+        id: 'totalAmount',
+        label: 'مجموع قیمت',
+        format: (value) => value.toLocaleString('fa-IR'),
+    },
+    {
+        id: 'editeCount',
+        label: 'تغییر تعداد',
         format: (value) => value.toLocaleString('fa-IR'),
     },
     {
         id: 'setting',
         label: '',
-        minWidth: 170,
     }
 ];
 
@@ -62,11 +71,12 @@ const Basket = props => {
 
     const [data, setData] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [count, setCount] = useState(0);
 
 
     useEffect((props) => {
         didMount()
-    }, []);
+    }, [count]);
 
 
     const didMount = () => {
@@ -79,8 +89,6 @@ const Basket = props => {
         setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
     }
 
-    console.log(data)
-
     const navigate = useNavigate();
 
     const classes = useStyle();
@@ -92,8 +100,33 @@ const Basket = props => {
         setData(storage);
         setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
         store.dispatch({type: 'ORDERS_DECREMENT'});
-    }
+    };
 
+    const handleChange = e => {
+        if (e.key === '-' || e.target.value[0] === '0' || e.key === '+' || e.key === '*' || e.key === '/') {
+            e.preventDefault();
+        } else if (e.target.value.length < 2 && e.key === 'Backspace') {
+            e.preventDefault();
+        } else if (e.target.value.length === 0 && e.key === '0' || e.key === '.') {
+            e.preventDefault();
+        }
+    };
+
+    const handleChangeCount = (e, count, orderId, index) => {
+        http.get(PRODUCTS + '/' + orderId).then(res => {
+            let orderCount = +res.data.count;
+            if (e.target.value > orderCount) {
+                e.target.value = orderCount;
+            }
+            setCount(orderCount);
+            let storage = JSON.parse(localStorage.getItem('orders'));
+            storage[index].count = +e.target.value;
+            storage[index].totalAmount = storage[index].price * storage[index].count;
+            localStorage.setItem('orders', JSON.stringify(storage));
+            setData(storage);
+            setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
+        });
+    };
 
     return (
         <>
@@ -123,15 +156,41 @@ const Basket = props => {
                         <TableBody>
                             {!!data.length && data.map((item, index) => (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={`${index}`}>
-                                    <TableCell sx={{width: '80%'}}>
+                                    <TableCell>
+                                        <figure style={{'width': '60px', 'height': 'auto'}}>
+                                            <img style={{'width': '100%'}}
+                                                 src={`http://localhost:3002/files/${item.image}`}
+                                                 alt={`${item.id}${item.image}`}/>
+                                        </figure>
+                                    </TableCell>
+                                    <TableCell>
                                         <PersianNumber number={item.brand}/>
                                         &nbsp;<PersianNumber number={item.name}/>
                                     </TableCell>
-                                    <TableCell sx={{width: '10%'}}>
+                                    <TableCell>
                                         <PersianNumber number={item.price}/>&nbsp;تومان
                                     </TableCell>
-                                    <TableCell sx={{width: '10%'}}>
+                                    <TableCell>
                                         <PersianNumber number={item.count}/>
+                                    </TableCell>
+                                    <TableCell>
+                                        <PersianNumber number={item.count * item.price}/>
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextField size="small" sx={{width: '100px'}}
+                                                   type="number"
+                                                   id="outlined-basic"
+                                                   label="تعداد"
+                                                   variant="outlined"
+                                                   InputProps={{
+                                                       inputProps: {
+                                                           min: 1, max: count !== 0 ? count : 100,
+                                                           onKeyPress: handleChange
+                                                       },
+                                                   }}
+                                                   defaultValue={item.count}
+                                                   onChange={e => handleChangeCount(e, +item.count, item.orderId, index)}
+                                        />
                                     </TableCell>
                                     <TableCell key={item.key}>
                                         <Box sx={{display: 'flex', gap: '10px'}}>
