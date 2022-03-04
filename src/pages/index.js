@@ -5,8 +5,7 @@ export {InventoryManagement} from './InventoryManagement/InventoryManagement.pag
 export {LoginPanelManager} from './LoginPanelManager/LoginPanelManager.page';
 export {MacPayment} from './MacPayment/MacPayment.page';
 export {OrdersManager} from './OrdersManager/OrdersManager.page';
-export {PaymentResultSuccess} from './PaymentResult/PaymentResultSuccess.page';
-export {PaymentResultFailed} from './PaymentResult/PaymentResultFailed.page';
+export {PaymentResult} from './PaymentResult/PaymentResult.page';
 export {ProductsList} from './ProductsList/ProductsList.page';
 export {Purchase} from './Purchase/Purchase.page';
 export {NotFound} from './NotFound/NotFound.page'
