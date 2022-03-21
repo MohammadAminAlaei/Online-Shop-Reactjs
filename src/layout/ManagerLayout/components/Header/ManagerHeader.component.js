@@ -75,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('lg')]: {
             fontSize: '1rem!important'
         },
-
     },
     containerPadding: {
         padding: '1.2rem 0',

@@ -1,8 +1,14 @@
 import axios from 'axios';
 import {PATHS} from 'configs/routes.config';
-import {LOGIN} from 'configs/url.config';
-import {ACCESS_TOKEN, BASE_URL, IS_LOGGED_IN} from 'configs/variables.config';
+import {LOGIN, REFRESH_TOKEN as REFRESH_TOKEN_URL, WHOAMI} from 'configs/url.config';
+import {ACCESS_TOKEN, REFRESH_TOKEN, BASE_URL, IS_LOGGED_IN} from 'configs/variables.config';
 import {toast} from 'react-toastify';
+import {refreshToken} from 'redux/actions/user.action';
+import store from 'redux/store';
+import history from './history.service';
+import errorMap from 'assets/data/error-map';
+
+let canRefresh = true;
 
 class HttpService {
     constructor() {
@@ -10,8 +16,8 @@ class HttpService {
 
         axios.interceptors.request.use((config) => {
             // console.log('CONFIG: ', config);
-            const token = localStorage.getItem(ACCESS_TOKEN);
-            if (config.url !== LOGIN) {
+            let token = localStorage.getItem(config.url !== REFRESH_TOKEN_URL ? ACCESS_TOKEN : REFRESH_TOKEN);
+            if (config.url !== LOGIN && (config.url === WHOAMI || token)) {
                 config.headers['token'] = `${token}`
             }
 
@@ -22,17 +28,48 @@ class HttpService {
 
         axios.interceptors.response.use((response) => {
                 // console.log('Interceptor response success', response);
+                canRefresh = true;
                 return response;
             },
-            (error) => {
-                console.log('Interceptor response error', error.response && (error.response.data === 'Token Expired!' || error.response.data === 'Invalid Token!'));
-                if (error.response && (error.response.data === 'Token Expired!' || error.response.data === 'Invalid Token!')) {
-                    localStorage.setItem(IS_LOGGED_IN, false.toString());
-                    // window.location.href = 'http://localhost:3000' + PATHS.SIGN_IN;
+            async (error) => {
+                if (!error.response) return Promise.reject(error);
+
+                const originalRequest = error.config;
+                console.log('error : ', originalRequest);
+                if (error.response.status === 401) {
+                    if (canRefresh) {
+                        canRefresh = false;
+                        try {
+                            await store.dispatch(refreshToken());
+                            return new Promise((resolve, reject) => {
+                                axios.request(originalRequest)
+                                    .then((res) => {
+                                        console.log('res originalRequest : ', res);
+                                        resolve(res);
+                                    })
+                                    .catch(e => {
+                                        reject(e);
+                                    })
+                            });
+
+                        } catch (e) {
+                            console.log('error refresh token: ', error.response);
+                            // if (error.response && error.response.status === 401) {
+                            //   canRefresh = false;
+                            // } else {
+                            localStorage.setItem(IS_LOGGED_IN, false.toString());
+                            history.push(PATHS.SIGN_IN);
+                            return Promise.reject(error);
+                            // }
+                        }
+                    }
+
+
                 } else {
-                    toast.error(error.response.data)
+                    toast.error(errorMap[error.response.status])
+                    return Promise.reject(error);
                 }
-                return Promise.reject(error);
+
             })
     }
 

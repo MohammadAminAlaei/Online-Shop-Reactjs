@@ -1,12 +1,13 @@
 $font-url: '../../assets/fonts';
 $font: 'Vazir';
+$font-IRSans: 'IRSans';
 
 
 @font-face {
   font-family: '#{$font}-Light';
   src: url('#{$font-url}/#{$font}/#{$font}-Light.eot') format('eot');
-  src: url('#{$font-url}/#{$font}/#{$font}-Light.ttf') format('truetype'),
-  url('#{$font-url}/#{$font}/#{$font}-Light.woff') format('woff');
+  src: url('#{$font-url}/#{$font}/#{$font}-Light.ttf') format('truetype');
+  //url('#{$font-url}/#{$font}/#{$font}-Light.woff') format('woff')
 }
 
 @font-face {
@@ -22,4 +23,20 @@ $font: 'Vazir';
   src: url('#{$font-url}/#{$font}/#{$font}-Bold.ttf') format('truetype'),
   url('#{$font-url}/#{$font}/#{$font}-Bold.woff') format('woff');
 }
+
+@font-face {
+  font-family: '#{$font-IRSans}-Regular';
+  src: url('#{$font-url}/#{$font-IRSans}/#{$font-IRSans}-Regular.woff2') format('woff2'),
+  //src: url('#{$font-url}/#{$font-IRSans}/#{$font-IRSans}-Regular.ttf') format('truetype'),
+  //url('#{$font-url}/#{$font-IRSans}/#{$font-IRSans}-Regular.woff') format('woff');
+  //src: url("../fonts/IRSans/IRSans-Regular.woff2  ") format("woff2");
+}
+
+//@font-face {
+//  font-family: '#{$font-IRSans}-Bold';
+//  src: url('#{$font-url}/#{$font-IRSans}/#{$font-IRSans}-Bold.eot') format('eot');
+//  src: url('#{$font-url}/#{$font-IRSans}/#{$font-IRSans}-Bold.ttf') format('truetype'),
+//  url('#{$font-url}/#{$font-IRSans}/#{$font-IRSans}-Bold.woff') format('woff');
+//}
+
 

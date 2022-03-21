@@ -40,7 +40,8 @@ import parse from 'html-react-parser';
 import {toast} from 'react-toastify';
 import CardMedia from '@mui/material/CardMedia';
 import styles from './OrdersManager.module.scss';
-import {PersianNumber} from 'components'
+import {PersianNumber} from 'components';
+import {useNavigate} from 'react-router-dom';
 
 
 const StyledButton = styled('button')`
@@ -245,10 +246,11 @@ const style = {
 
 const OrdersManage = props => {
 
+        const searchURL = window.location.search.split('&');
         const [data, setData] = useState([]);
-        const [page, setPage] = useState(1);
+        const [page, setPage] = useState(searchURL[2] ? searchURL[2].split('=')[1] : 1);
         const [numberOfPages, setNumberOfPages] = useState(10);
-        const [value, setValue] = useState('');
+        const [value, setValue] = React.useState(searchURL[0] ? searchURL[0].split('=')[1] : '');
         const [typeModal, setTypeModal] = useState('');
         const [open, setOpen] = useState(false);
         const [description, setDescription] = useState('');
@@ -260,6 +262,7 @@ const OrdersManage = props => {
         const [grouping, setGrouping] = React.useState('');
         const [editOrderName, setEditOrderName] = useState('');
         const [editOrderBrand, setEditOrderBrand] = useState('');
+        const navigate = useNavigate();
 
 
         const handleModal = (id, type) => {
@@ -281,6 +284,7 @@ const OrdersManage = props => {
 
 
         useEffect(() => {
+            navigate(`?_sort=${value}&_order=${value === 'brand' ? 'asc' : 'desc'}&_page=${page}&_limit=10`);
             fetchProducts();
             if (editId !== null) {
                 http.get(`${PRODUCTS}/${editId}`).then(res => {
@@ -362,7 +366,6 @@ const OrdersManage = props => {
                             'name': data.category_name,
                             'icon': '65ddd8b1bbce4d8396b62611147fa1d6'
                         },
-
                     }).then(res => {
                         fetchProducts();
                         handleClose();
@@ -451,7 +454,7 @@ const OrdersManage = props => {
                             <StyledOption value="price">قیمت</StyledOption>
                             <StyledOption value="count">تعداد</StyledOption>
                             <StyledOption value="brand">برند</StyledOption>
-                            <StyledOption value="">جدیدترین محصولات</StyledOption>
+                            {/*<StyledOption value=""></StyledOption>*/}
                         </CustomSelect>
                     </div>
                     <Button onClick={e => handleModal(null, 'add')} className={classes.button} color="success"

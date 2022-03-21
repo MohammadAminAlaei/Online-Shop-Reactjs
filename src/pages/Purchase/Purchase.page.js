@@ -102,6 +102,11 @@ const Purchase = props => {
     const handleAddOrder = e => {
         let storage = JSON.parse(localStorage.getItem('orders'));
 
+        if (countOrder === null || countOrder === '' || countOrder === undefined) {
+            toast.warning('لطفا تعداد را وارد کنید');
+            return;
+        }
+
 
         const order = {
             count: countOrder,
@@ -115,6 +120,12 @@ const Purchase = props => {
         localStorage.setItem('orders', JSON.stringify([...storage, order]));
         store.dispatch({type: 'ORDERS_INCREMENT'});
         toast.success('کالا با موفقیت به سبد خرید اضافه شد.');
+
+        http.patch(`${PRODUCTS}/${id}`, {
+            count: data[0].count - countOrder
+        }).then(res => {
+            setData([...data, res.data]);
+        });
     }
 
     const handleChange = e => {
@@ -147,11 +158,12 @@ const Purchase = props => {
                     <Box className={classes.box} key={item.firstName}>
                         <Box>
                             <figure>
-                                <CardMedia
-                                    component="img"
-                                    height="400"
-                                    image={`http://localhost:3002/files/${item.image[0]}`}
-                                    alt="test"
+                                <CardMedia sx={{maxWidth: '500px'}}
+                                           component="img"
+                                           width="300"
+                                           height="400"
+                                           image={`http://localhost:3002/files/${item.image[0]}`}
+                                           alt="test"
                                 />
                             </figure>
                         </Box>

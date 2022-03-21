@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
+import {useNavigate} from 'react-router-dom';
+import {connect} from 'react-redux';
 import {
     Box,
     Button,
@@ -8,26 +10,24 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableHead, TablePagination,
+    TableHead,
     TableRow,
     Typography
 } from '@mui/material';
-import {makeStyles} from '@mui/styles';
-import {getProduct} from 'redux/actions/products.action';
-import {connect} from 'react-redux';
-import {getProducts} from 'api/product.api';
-import axios from 'axios';
-import http from 'services/http.service';
-import {styled} from '@mui/material/styles';
 import {tableCellClasses} from '@mui/material/TableCell';
-import {AppPagination, InputChanger, PersianNumber} from 'components';
-import {PRODUCTS} from '../../configs/url.config';
-import PropTypes from 'prop-types';
+import {makeStyles} from '@mui/styles';
 import SelectUnstyled, {selectUnstyledClasses} from '@mui/base/SelectUnstyled';
 import OptionUnstyled, {optionUnstyledClasses} from '@mui/base/OptionUnstyled';
-import PopperUnstyled from '@mui/base/PopperUnstyled';
 import Skeleton from '@mui/material/Skeleton';
+import {getProduct} from 'redux/actions/products.action';
+import PopperUnstyled from '@mui/base/PopperUnstyled';
+import PropTypes from 'prop-types';
 import {toast} from 'react-toastify';
+import http from 'services/http.service';
+import {styled} from '@mui/material/styles';
+import {AppPagination, InputChanger, PersianNumber} from 'components';
+import {PRODUCTS} from 'configs/url.config';
+
 
 const StyledButton = styled('button')`
   font-family: IBM Plex Sans, sans-serif;
@@ -207,14 +207,16 @@ const columns = [
 
 const InventoryManage = props => {
 
+    const searchURL = window.location.search.split('&');
     const [data, setData] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(searchURL[2] ? searchURL[2].split('=')[1] : 1);
     const [numberOfPages, setNumberOfPages] = useState(10);
-    const [value, setValue] = React.useState('');
+    const [value, setValue] = React.useState(searchURL[0] ? searchURL[0].split('=')[1] : '');
     const [displayInputPrice, setDisplayInputPrice] = useState([])
     const [displayInputCount, setDisplayInputCount] = useState([])
     const [displayButton, setDisplayButton] = useState('false')
-    const [changePrice_Count, setChangePrice_Count] = useState([])
+    const [changePrice_Count, setChangePrice_Count] = useState([]);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -232,13 +234,13 @@ const InventoryManage = props => {
                 document.querySelectorAll('input').forEach(item => {
                     item.value = ''
                 })
-
             }
         })
     }
 
     // FETCH PRODUCTS
     const fetchProducts = async () => {
+        navigate(`?_sort=${value}&_order=${value === 'brand' ? 'asc' : 'desc'}&_page=${page}&_limit=10`);
         const {data} = await http.get(`${PRODUCTS}?_sort=${value}&_order=${value === 'brand' ? 'asc' : 'desc'}&_page=${page}&_limit=10`);
         setData(data);
         await http.get(PRODUCTS).then(res => {
@@ -257,24 +259,11 @@ const InventoryManage = props => {
 
     const handleSave = e => {
 
+        const changeCount = changePrice_Count.length;
+        let successApiCall = 0;
+
 
         changePrice_Count.forEach(item => {
-
-            // Promise.allSettled([
-            //     http.patch(`${PRODUCTS}/${item.id}`, {
-            //         price: item.price,
-            //         count: item.count
-            //     })
-            // ]).then(res => {
-            //     if (res[0].status === 'fulfilled') {
-            //         toast.success('اطلاعات با موفقیت ثبت شد');
-            //         setDisplayButton('false');
-            //         setDisplayInputPrice([]);
-            //         setDisplayInputCount([]);
-            //         setChangePrice_Count([]);
-            //         fetchProducts();
-            //     }
-            // })
 
             Promise.all([
                 http.patch(`${PRODUCTS}/${item.id}`, {
@@ -282,8 +271,8 @@ const InventoryManage = props => {
                     count: item.count
                 })
             ]).then(() => {
-                item.price && toast.success(` قیمت ${item.categoryName} ${item.name} با موفقیت از ${item.previousPrice} به ${item.price} ویرایش یافت`);
-                item.count && toast.success(` موجودی ${item.categoryName} ${item.name} با موفقیت از ${item.previousCount} به ${item.count} ویرایش یافت`);
+                successApiCall++;
+                successApiCall === changeCount && toast.success('اطلاعات با موفقیت ثبت شد');
                 fetchProducts();
                 setDisplayButton('false')
                 setDisplayInputPrice([]);
@@ -317,7 +306,7 @@ const InventoryManage = props => {
                         <StyledOption value="price">قیمت</StyledOption>
                         <StyledOption value="count">تعداد</StyledOption>
                         <StyledOption value="brand">برند</StyledOption>
-                        <StyledOption value="">جدیدترین محصولات</StyledOption>
+                        {/*<StyledOption value="">جدیدترین محصولات</StyledOption>*/}
                     </CustomSelect>
                 </div>
                 <Button disabled={displayButton === 'false'} className={classes.button} onClick={handleSave}

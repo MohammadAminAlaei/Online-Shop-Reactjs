@@ -9,7 +9,7 @@ const multer = require('multer');
 const upload = multer({dest: 'uploads/'});
 const jwt = require('jsonwebtoken');
 const AUTH_JWT_SECRET = 'TOP-SECRET';
-const AUTH_JWT_OPTIONS = {expiresIn: 100000};
+const AUTH_JWT_OPTIONS = {expiresIn: 1000000};
 
 // TODO: vaghti token nis, 200 mide
 // TODO: vaghti token nist, invalid nade (login api)

@@ -3,12 +3,13 @@ import {Helmet} from 'react-helmet';
 import {Button, TextField, Typography} from '@mui/material';
 import Box from '@mui/material/Box';
 import {makeStyles} from '@mui/styles';
-import moment from 'jalali-moment'
+import moment from 'jalali-moment';
+import {useFormik} from 'formik';
+import * as yup from 'yup';
 import AdapterJalali from '@date-io/date-fns-jalali';
 import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import {toast} from 'react-toastify';
-
 
 const useStyle = makeStyles(theme => ({
     form: {
@@ -39,6 +40,29 @@ const useStyle = makeStyles(theme => ({
         width: '100%!important',
     }
 }));
+// const iranRegexPhoneNumber = /^([\u06F0]|[0])([\u06F9]|[9])(([\u06F0-\u06F9]|[0-9]){2})(([\u06F0-\u06F9]|[0-9]){3})(([\u06F0-\u06F9]|[0-9]){4})/
+
+const validationSchema = yup.object({
+        firstName: yup
+            .string('لطفا نام را وارد کنید')
+            .required('نام یکی از فیلد های الزامی است'),
+        lastName: yup
+            .string('لطفا نام خانوادگی را وارد کنید')
+            .required('نام خانوادگی یکی از فیلد های الزامی است'),
+        address: yup
+            .string('لطفا آدرس را وارد کنید')
+            .required('آدرس یکی از فیلد های الزامی است'),
+        phoneNumber: yup
+            .string('لطفا شماره تلفن را وارد کنید')
+            // regexr.com/6anqd
+            .matches(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/, {
+                message: 'شماره تلفن صحیح نیست',
+                excludeEmptyString: false,
+            })
+            .required('آدرس یکی از فیلد های الزامی است'),
+        date: yup.date().nullable()
+    }
+);
 
 
 const FinalPurchase = () => {
@@ -60,50 +84,76 @@ const FinalPurchase = () => {
 
 
     const handleSubmit = e => {
-        e.preventDefault();
-        const form = new FormData(e.target);
-        let data = Object.fromEntries(form);
+        // e.preventDefault();
+        // const form = new FormData(e.target);
+        // let data = Object.fromEntries(form);
 
 
-        if (data.firstName === '') {
-            toast.error('وارد کردن نام اجباری می باشد');
-            document.querySelector('input[name=\'firstName\']').focus();
-            return;
-        }
+        // if (data.firstName === '') {
+        //     toast.error('وارد کردن نام اجباری می باشد');
+        //     document.querySelector('input[name=\'firstName\']').focus();
+        //     return;
+        // }
+        //
+        // if (data.lastName === '') {
+        //     toast.error('وارد کردن نام خانوادگی اجباری می باشد');
+        //     document.querySelector('input[name=\'lastName\']').focus();
+        //     return;
+        // }
+        //
+        // if (data.address === '') {
+        //     toast.error('وارد کردن آدرس اجباری می باشد');
+        //     document.querySelector('input[name=\'address\']').focus();
+        //     return;
+        // }
+        //
+        // if (data.phoneNumber.length < 11) {
+        //     toast.warning('شماره تلفن باید 11 رقم باشد');
+        //     document.querySelector('input[name=\'phoneNumber\']').focus();
+        //     return;
+        // }
 
-        if (data.lastName === '') {
-            toast.error('وارد کردن نام خانوادگی اجباری می باشد');
-            document.querySelector('input[name=\'lastName\']').focus();
-            return;
-        }
-
-        if (data.address === '') {
-            toast.error('وارد کردن آدرس اجباری می باشد');
-            document.querySelector('input[name=\'address\']').focus();
-            return;
-        }
-
-        if (data.phoneNumber.length < 11) {
-            toast.warning('شماره تلفن باید 11 رقم باشد');
-            document.querySelector('input[name=\'phoneNumber\']').focus();
-            return;
-        }
-
-        let d = new Date();
-        d.setDate(d.getDate());
-        if (value < d) {
-            toast.warning('تاریخ باید 1 روز بعد از تاریخ امروز باشد');
-            return;
-        }
-
-
-        const dataToSend = {
-            ...data,
-            date: moment(value, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')
-        };
-        localStorage.setItem('CUSTOMER_INFO', JSON.stringify(dataToSend));
-        window.location.href = 'http://localhost:3001/';
+        // let d = new Date();
+        // d.setDate(d.getDate());
+        // if (value < d) {
+        //     toast.warning('تاریخ باید 1 روز بعد از تاریخ امروز باشد');
+        //     return;
+        // }
+        //
+        //
+        // const dataToSend = {
+        //     ...data,
+        //     date: moment(value, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')
+        // };
+        // localStorage.setItem('CUSTOMER_INFO', JSON.stringify(dataToSend));
+        // window.location.href = 'http://localhost:3001/';
     };
+
+    const formik = useFormik({
+        initialValues: {
+            firstName: '',
+            lastName: '',
+            address: '',
+            phoneNumber: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (e) => {
+            let d = new Date();
+            d.setDate(d.getDate());
+            if (value < d) {
+                toast.warning('تاریخ باید 1 روز بعد از تاریخ امروز باشد');
+                return;
+            }
+
+            const dataToSend = {
+                ...e,
+                date: moment(value, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')
+            };
+
+            localStorage.setItem('CUSTOMER_INFO', JSON.stringify(dataToSend));
+            window.location.href = 'http://localhost:3001/';
+        },
+    });
 
 
     const classes = useStyle();
@@ -115,7 +165,7 @@ const FinalPurchase = () => {
             </Helmet>
             <Typography sx={{fontFamily: 'Vazir-bold'}} variant="h4" component="h3"> نهایی کردن
                 خرید </Typography>
-            <form onSubmit={handleSubmit} className={classes.form}>
+            <form onSubmit={e => formik.handleSubmit(e)} className={classes.form}>
                 <Box className={classes.box}>
                     <TextField
                         id="outlined-basic"
@@ -123,12 +173,20 @@ const FinalPurchase = () => {
                         variant="outlined"
                         fullWidth
                         name="firstName"
+                        value={formik.values.firstName}
+                        onChange={formik.handleChange}
+                        error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                        helperText={formik.touched.firstName && formik.errors.firstName}
                     /> <TextField
                     id="outlined-basic"
                     label="نام خانوادگی:"
                     variant="outlined"
                     fullWidth
                     name="lastName"
+                    value={formik.values.lastName}
+                    onChange={formik.handleChange}
+                    error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                    helperText={formik.touched.lastName && formik.errors.lastName}
                 />
                 </Box>
                 <Box className={classes.box}>
@@ -140,6 +198,10 @@ const FinalPurchase = () => {
                         variant="outlined"
                         fullWidth
                         name="address"
+                        value={formik.values.address}
+                        onChange={formik.handleChange}
+                        error={formik.touched.address && Boolean(formik.errors.address)}
+                        helperText={formik.touched.address && formik.errors.address}
                     />
                     <TextField
                         id="outlined-basic"
@@ -148,6 +210,10 @@ const FinalPurchase = () => {
                         fullWidth
                         name="phoneNumber"
                         type="number"
+                        value={formik.values.phoneNumber}
+                        onChange={formik.handleChange}
+                        error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
+                        helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                     />
                 </Box>
                 <Box className={classes.box}>
@@ -158,7 +224,7 @@ const FinalPurchase = () => {
                             value={value}
                             onChange={(newValue) => setValue(newValue)}
                             renderInput={(params) => <TextField {...params} />}
-                            name="date"/>
+                        />
                     </LocalizationProvider>
                     <div style={{width: '100%'}}/>
                 </Box>

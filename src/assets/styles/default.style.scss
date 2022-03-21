@@ -1,0 +1,41 @@
+@import "index";
+
+body {
+  background-color: #f5f5f5;
+}
+
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  font-family: IRSans-Regular, sans-serif;
+  scroll-behavior: smooth;
+}
+
+#Polygon-1, #Polygon-2, #Polygon-3, #Polygon-4, #Polygon-4, #Polygon-5 {
+  animation: float 1s infinite ease-in-out alternate;
+}
+
+#Polygon-2 {
+  animation-delay: .2s;
+}
+
+#Polygon-3 {
+  animation-delay: .4s;
+}
+
+#Polygon-4 {
+  animation-delay: .6s;
+}
+
+#Polygon-5 {
+  animation-delay: .8s;
+}
+
+@keyframes float {
+  100% {
+    transform: translateY(20px);
+  }
+}

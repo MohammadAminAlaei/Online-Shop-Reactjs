@@ -1,13 +1,15 @@
 import {Component} from 'react';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {PATHS} from 'configs/routes.config';
 import * as Page from 'pages'
 import {ProtectedRoute, PublicRoute, PrivateRoute} from './components';
+import {Route, Routes, unstable_HistoryRouter as BrowserRouter} from 'react-router-dom';
+import history from 'services/history.service';
+
 
 class AppRoute extends Component {
     render() {
         return (
-            <BrowserRouter>
+            <BrowserRouter history={history}>
                 <Routes>
                     <Route path="*" element={<Page.NotFound/>}/>
                     <Route path={PATHS.BASKET}

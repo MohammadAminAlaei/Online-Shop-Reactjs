@@ -29,6 +29,7 @@ CheckCircleIcon.propTypes = {
     color: PropTypes.string,
     sx: PropTypes.shape({fontSize: PropTypes.string})
 };
+
 const PaymentResult = () => {
 
     const params = useParams();

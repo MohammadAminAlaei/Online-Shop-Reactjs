@@ -35,126 +35,7 @@ import {CKEditor} from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {toast} from 'react-toastify';
 import moment from 'jalali-moment';
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
-
-const StyledButton = styled('button')`
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
-  box-sizing: border-box;
-  min-height: calc(1.5em + 22px);
-  min-width: 200px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 0.75em;
-  margin: 0.5em;
-  padding: 10px;
-  text-align: left;
-  line-height: 1.5;
-  color: #000;
-
-  &.${selectUnstyledClasses.focusVisible} {
-    outline: 4px solid rgba(100, 100, 100, 0.3);
-  }
-
-  &.${selectUnstyledClasses.expanded} {
-    border-radius: 0.75em 0.75em 0 0;
-
-    &::after {
-      content: '▴';
-    }
-  }
-
-  &::after {
-    content: '▾';
-    float: right;
-  }
-`;
-
-const StyledListbox = styled('ul')`
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  background-color: #fff;
-  min-width: 200px;
-  border: 1px solid #ccc;
-  border-top: none;
-  color: #000;
-`;
-
-const StyledOption = styled(OptionUnstyled)`
-  list-style: none;
-  padding: 4px 10px;
-  margin: 0;
-  border-bottom: 1px solid #ddd;
-  cursor: default;
-
-  &:last-of-type {
-    border-bottom: none;
-  }
-
-  &.${optionUnstyledClasses.disabled} {
-    color: #888;
-  }
-
-  &.${optionUnstyledClasses.selected} {
-    background-color: rgba(25, 118, 210, 0.08);
-  }
-
-  &.${optionUnstyledClasses.highlighted} {
-    background-color: #16d;
-    color: #fff;
-  }
-
-  &.${optionUnstyledClasses.highlighted}.${optionUnstyledClasses.selected} {
-    background-color: #05e;
-    color: #fff;
-  }
-
-  &:hover:not(.${optionUnstyledClasses.disabled}) {
-    background-color: #39e;
-  }
-`;
-
-const StyledPopper = styled(PopperUnstyled)`
-  z-index: 1000;
-`;
-
-function CustomSelect(props) {
-    const components = {
-        Root: StyledButton,
-        Listbox: StyledListbox,
-        Popper: StyledPopper,
-        ...props.components,
-    };
-
-    return <SelectUnstyled {...props} components={components}/>;
-}
-
-CustomSelect.propTypes = {
-    /**
-     * The components used for each slot inside the Select.
-     * Either a string to use a HTML element or a component.
-     * @default {}
-     */
-    components: PropTypes.shape({
-        Listbox: PropTypes.elementType,
-        Popper: PropTypes.elementType,
-        Root: PropTypes.elementType,
-    }),
-};
+import {useNavigate} from 'react-router-dom';
 
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
@@ -166,7 +47,6 @@ const StyledTableCell = styled(TableCell)(({theme}) => ({
         fontSize: 14,
     },
 }));
-
 
 const useStyle = makeStyles(theme => ({
     box: {
@@ -239,24 +119,31 @@ const columns = [
 ];
 
 const columnsModal = [
-    {id: 'name', label: 'کالا', width: '70%'},
-    {id: 'price', label: 'قیمت', width: '18%'},
+    {id: 'name', label: 'کالا', width: '50%'},
+    {id: 'price', label: 'قیمت'},
     {
         id: 'count',
         label: 'تعداد',
-        width: '12%',
+        format: (value) => value.toLocaleString('fa-IR'),
+    },
+    {
+        id: 'totalAmount',
+        label: 'مجموع ',
+        width: '20%',
         format: (value) => value.toLocaleString('fa-IR'),
     },
 ]
 
 
 const CommodityManagement = () => {
+    const searchURL = window.location.search.split('&');
     const [data, setData] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(searchURL[1] ? searchURL[1].split('=')[1] : 1);
     const [numberOfPages, setNumberOfPages] = useState(10);
     const [value, setValue] = React.useState('doing');
     const [open, setOpen] = React.useState(false);
     const [dataModal, setDataModal] = useState([]);
+    const navigate = useNavigate();
 
 
     const handleOpen = (e, id) => {
@@ -272,32 +159,18 @@ const CommodityManagement = () => {
     useEffect(() => {
         fetchProducts();
 
-    }, [page, value, dataModal]);
+    }, [page, value, dataModal, numberOfPages]);
 
     // FETCH PRODUCTS
     const fetchProducts = async () => {
-        const {data} = await http.get(`${CUSTOMERS}?status=${value}&_sort=deliverytime&_order=desc`);
-        setData(data);
-        await http.get(CUSTOMERS).then(res => {
-            setNumberOfPages(res.headers['x-total-count']);
-        });
-        // didMount();
-    };
+        navigate(`?status=${value}&_page=${page}&_limit=10`);
 
-    // const didMount = () => {
-    //     const todayDate = moment().locale('fa').format('YYYY/MM/DD');
-    //
-    //     http.get(`${CUSTOMERS}?deliverytime=${todayDate}`).then(res => {
-    //         if (res.data === []) return;
-    //         res.data.forEach(item => {
-    //             if (item.status === 'doing') {
-    //                 http.patch(`${CUSTOMERS}/${item.id}`, {status: 'done'}).then(res => {
-    //                     fetchProducts();
-    //                 })
-    //             }
-    //         })
-    //     });
-    // };
+        const {data} = await http.get(`${CUSTOMERS}?status=${value}&_sort=deliverytime&_order=desc&_page=${page}&_limit=10`);
+        setData(data);
+        await http.get(`${CUSTOMERS}?status=${value}`).then(res => {
+            setNumberOfPages(Math.ceil(res.data.length / 10));
+        });
+    };
 
 
     const classes = useStyle();
@@ -305,6 +178,7 @@ const CommodityManagement = () => {
 
     const handleChange = (event) => {
         setValue(event.target.value);
+        setPage(1);
     };
 
     const handleChangeStatus = (id, status) => {
@@ -370,7 +244,7 @@ const CommodityManagement = () => {
                                         {item.name}
                                     </TableCell>
                                     <TableCell sx={{width: '20%'}}>
-                                        {(item.totalAmount).toLocaleString('fa-ir')}
+                                        {(item.totalAmount)}
                                     </TableCell>
                                     <TableCell sx={{width: '40%'}}>
                                         {item.deliverytime}
@@ -466,8 +340,11 @@ const CommodityManagement = () => {
                                                         <TableCell sx={{width: '20%'}}>
                                                             {(item.price).toLocaleString('fa-ir')}
                                                         </TableCell>
-                                                        <TableCell sx={{width: '40%'}}>
+                                                        <TableCell sx={{width: '20%'}}>
                                                             {item.count}
+                                                        </TableCell>
+                                                        <TableCell sx={{width: '30%'}}>
+                                                            {item.count * item.price}
                                                         </TableCell>
                                                     </TableRow>
                                                 ))}
@@ -491,7 +368,6 @@ const CommodityManagement = () => {
                 </Fade>
             </Modal>
             <AppPagination setPage={setPage} pageNumber={numberOfPages}/>
-
         </>
     );
 }

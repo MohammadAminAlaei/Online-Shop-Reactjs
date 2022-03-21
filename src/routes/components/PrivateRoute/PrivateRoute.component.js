@@ -4,6 +4,8 @@ import {PATHS} from 'configs/routes.config';
 import {ManagerLayout} from 'layout/ManagerLayout/Manager.layout';
 import {History} from '..';
 import {DEFAULT_PROPS, PROP_TYPES} from './PrivateRoute.config';
+import store from 'redux/store'
+import {whoami} from 'redux/actions/user.action';
 
 const TargetPage = ({Component, hasLayout}) => {
 
@@ -13,6 +15,17 @@ const TargetPage = ({Component, hasLayout}) => {
     if (IS_LOGGED_IN === 'false') {
         return <Navigate replace to={PATHS.LOGIN_PANEL_MANAGEMENT}/>
     }
+
+    const initApp = async () => {
+        try {
+            // console.log('init app');
+            store.dispatch(whoami());
+        } catch (e) {
+
+        }
+    };
+
+    (() => initApp())();
 
     return (
         <History onRender={
