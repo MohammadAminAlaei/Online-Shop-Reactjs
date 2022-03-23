@@ -656,7 +656,7 @@ const OrdersManage = props => {
                             <Typography sx={{textAlign: 'center'}} id="spring-modal-title" variant="h6"
                                         component="h2"> آیا
                                 از حذف کردن کالا
-                                مطمئنید? </Typography>
+                                مطمئنید؟ </Typography>
                             <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 3}}>
                                 <Button onClick={handleDeleteOrder} sx={{width: '100px'}} color="success"
                                         variant="contained"> بله </Button>

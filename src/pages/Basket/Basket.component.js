@@ -27,6 +27,9 @@ import {styled} from '@mui/material/styles';
 import {tableCellClasses} from '@mui/material/TableCell';
 import store from '../../redux/store';
 import {toast} from 'react-toastify';
+import Backdrop from '@mui/material/Backdrop';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
 
 
 const columns = [
@@ -65,23 +68,46 @@ const StyledTableCell = styled(TableCell)(({theme}) => ({
     },
 }));
 
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 2,
+};
+
 
 const Basket = props => {
 
     const [data, setData] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [count, setCount] = useState(0);
+    const [open, setOpen] = React.useState(false);
+    const [index, setIndex] = useState(null);
+    const handleClose = () => {
+        setIndex(null);
+        setOpen(false)
+    };
 
+    const handleOpen = index => {
+        setIndex(index)
+        setOpen(true)
+    };
 
-    useEffect((props) => {
+    useEffect(() => {
         didMount()
-    }, [count]);
+    }, [count, index]);
 
 
     const didMount = () => {
         let storage = JSON.parse(localStorage.getItem('orders'));
         storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('orders'));
         localStorage.setItem('orders', JSON.stringify(storage));
+        console.log(index)
 
         setData(storage);
 
@@ -98,13 +124,15 @@ const Basket = props => {
         navigate(PATHS.FINAL_PURCHASE);
     }
 
-    const handleDelete = (index) => {
+    const handleDelete = () => {
         let storage = JSON.parse(localStorage.getItem('orders'));
         storage.splice(index, 1);
         localStorage.setItem('orders', JSON.stringify(storage));
         setData(storage);
         setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
         store.dispatch({type: 'ORDERS_DECREMENT'});
+        toast.success('کالا با موفقیت حذف شد');
+        setOpen(false);
     };
 
     const handleChange = e => {
@@ -202,9 +230,11 @@ const Basket = props => {
                                     </TableCell>
                                     <TableCell key={item.key}>
                                         <Box sx={{display: 'flex', gap: '10px'}}>
-                                            <Button onClick={e => handleDelete(index)} color="warning"
+                                            <Button onClick={e => handleOpen(index)} color="warning"
                                                     variant="contained"> حذف </Button>
                                         </Box>
+                                        <div>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -212,6 +242,41 @@ const Basket = props => {
                     </Table>
                 </TableContainer>
             </Paper>
+
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={open}>
+                    <Box sx={style}>
+                        <Typography sx={{textAlign: 'center'}}
+                                    id="transition-modal-title" variant="h6"
+                                    component="h2">
+                            آیا از حذف این محصول اطمینان دارید؟
+                        </Typography>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            mt: 3
+                        }}>
+                            <Button onClick={handleDelete}
+                                    sx={{width: '100px'}}
+                                    color="success"
+                                    variant="contained"> بله </Button>
+                            <Button onClick={handleClose}
+                                    sx={{width: '100px'}}
+                                    variant="contained"> خیر </Button>
+                        </Box>
+                    </Box>
+                </Fade>
+            </Modal>
 
             <Typography variant="h6" sx={{margin: '30px 0 -20px 0', display: !!data.length ? 'none' : 'block'}}> سبد
                 خرید شما خالی
