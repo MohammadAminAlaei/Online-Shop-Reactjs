@@ -82,53 +82,6 @@ const FinalPurchase = () => {
         setDate(moment(d, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD'))
     };
 
-
-    const handleSubmit = e => {
-        // e.preventDefault();
-        // const form = new FormData(e.target);
-        // let data = Object.fromEntries(form);
-
-
-        // if (data.firstName === '') {
-        //     toast.error('وارد کردن نام اجباری می باشد');
-        //     document.querySelector('input[name=\'firstName\']').focus();
-        //     return;
-        // }
-        //
-        // if (data.lastName === '') {
-        //     toast.error('وارد کردن نام خانوادگی اجباری می باشد');
-        //     document.querySelector('input[name=\'lastName\']').focus();
-        //     return;
-        // }
-        //
-        // if (data.address === '') {
-        //     toast.error('وارد کردن آدرس اجباری می باشد');
-        //     document.querySelector('input[name=\'address\']').focus();
-        //     return;
-        // }
-        //
-        // if (data.phoneNumber.length < 11) {
-        //     toast.warning('شماره تلفن باید 11 رقم باشد');
-        //     document.querySelector('input[name=\'phoneNumber\']').focus();
-        //     return;
-        // }
-
-        // let d = new Date();
-        // d.setDate(d.getDate());
-        // if (value < d) {
-        //     toast.warning('تاریخ باید 1 روز بعد از تاریخ امروز باشد');
-        //     return;
-        // }
-        //
-        //
-        // const dataToSend = {
-        //     ...data,
-        //     date: moment(value, 'YYYY/MM/DD').locale('fa').format('YYYY/MM/DD')
-        // };
-        // localStorage.setItem('CUSTOMER_INFO', JSON.stringify(dataToSend));
-        // window.location.href = 'http://localhost:3001/';
-    };
-
     const formik = useFormik({
         initialValues: {
             firstName: '',
