@@ -184,6 +184,7 @@ const Purchase = props => {
                                                },
                                            }}
                                            onChange={e => handleChangeCount(e, +item.count)}
+                                           disabled={+item.count === 0}
                                 />
                                 <Button onClick={handleAddOrder} endIcon={<AddCircleIcon/>}
                                         sx={{width: '200px', height: '46px'}}
@@ -192,6 +193,11 @@ const Purchase = props => {
                                     به سبد
                                     خرید </Button>
                             </Box>
+                            {+item.count === 0 &&
+                            <Typography color="error"> کالای مورد نظر موجود نمیباشد </Typography>}
+                            {+item.count < 5 && +item.count !== 0 &&
+                            <Typography sx={{color: '#c0ca33'}}>تنها {item.count} عدد از کالا باقی مانده
+                                است</Typography>}
                         </Box>
                     </Box>
                     <Box className={classes.figureGroup}>
