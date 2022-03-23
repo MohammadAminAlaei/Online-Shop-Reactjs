@@ -7,10 +7,11 @@ import {makeStyles} from '@mui/styles';
 import {useParams} from 'react-router-dom';
 import moment from 'jalali-moment';
 import http from 'services/http.service';
-import {CUSTOMERS} from '../../configs/url.config';
+import {CUSTOMERS, PRODUCTS} from '../../configs/url.config';
 import store from 'redux/store';
 import * as PropTypes from 'prop-types';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import {toast} from 'react-toastify';
 
 
 const useStyle = makeStyles(theme => ({
@@ -44,6 +45,24 @@ const PaymentResult = () => {
 
             const storageDataCustomer = JSON.parse(localStorage.getItem('CUSTOMER_INFO'));
             const storageDataOrders = JSON.parse(localStorage.getItem('orders'));
+
+            console.log(storageDataOrders);
+
+            storageDataOrders.forEach(orderInfo => {
+                http.get(`${PRODUCTS}/${orderInfo.orderId}`).then(res => {
+                    const orderCount = res.data.count;
+                    console.log('orderCount:', orderCount);
+                    console.log('orderInfo Count:', orderInfo.count);
+                    if (orderCount < orderInfo.count) {
+                        toast.error('محصول مورد نظر با این مقدار تمام شده است');
+                        return;
+                    }
+
+                    http.patch(`${PRODUCTS}/${orderInfo.orderId}`, {count: orderInfo.count - orderCount}).then(res => {
+                        console.log(res);
+                    });
+                })
+            });
 
             const data = {
                 'name': storageDataCustomer.firstName + ' ' + storageDataCustomer.lastName,
