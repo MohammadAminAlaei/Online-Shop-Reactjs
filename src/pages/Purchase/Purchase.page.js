@@ -189,7 +189,8 @@ const Purchase = props => {
                                 <Button onClick={handleAddOrder} endIcon={<AddCircleIcon/>}
                                         sx={{width: '200px', height: '46px'}}
                                         variant="contained"
-                                        color="success"> افزودن
+                                        color="success"
+                                        disabled={+item.count === 0}> افزودن
                                     به سبد
                                     خرید </Button>
                             </Box>

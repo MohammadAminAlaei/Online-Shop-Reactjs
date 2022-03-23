@@ -51,14 +51,12 @@ const PaymentResult = () => {
             storageDataOrders.forEach(orderInfo => {
                 http.get(`${PRODUCTS}/${orderInfo.orderId}`).then(res => {
                     const orderCount = res.data.count;
-                    console.log('orderCount:', orderCount);
-                    console.log('orderInfo Count:', orderInfo.count);
                     if (orderCount < orderInfo.count) {
                         toast.error('محصول مورد نظر با این مقدار تمام شده است');
                         return;
                     }
 
-                    http.patch(`${PRODUCTS}/${orderInfo.orderId}`, {count: orderInfo.count - orderCount}).then(res => {
+                    http.patch(`${PRODUCTS}/${orderInfo.orderId}`, {count: orderCount - orderInfo.count}).then(res => {
                         console.log(res);
                     });
                 })
