@@ -26,9 +26,8 @@ import * as PropTypes from 'prop-types';
 import {styled} from '@mui/material/styles';
 import {tableCellClasses} from '@mui/material/TableCell';
 import store from '../../redux/store';
+import {toast} from 'react-toastify';
 
-
-const useStyle = makeStyles(theme => ({}));
 
 const columns = [
     {id: 'image', label: 'تصویر'},
@@ -91,7 +90,13 @@ const Basket = props => {
 
     const navigate = useNavigate();
 
-    const classes = useStyle();
+    const handleBasket = () => {
+        if (count === '' || count === null || count === 0) {
+            toast.warn('لطفا تعداد را وارد کنید');
+            return;
+        }
+        navigate(PATHS.FINAL_PURCHASE);
+    }
 
     const handleDelete = (index) => {
         let storage = JSON.parse(localStorage.getItem('orders'));
@@ -117,6 +122,9 @@ const Basket = props => {
             let orderCount = +res.data.count;
             if (e.target.value > orderCount) {
                 e.target.value = orderCount;
+            } else if (+e.target.value === 0 || e.target.value === '') {
+                e.target.value = 1;
+                toast.warning('تعداد نمیتواند خالی یا صفر باشد!');
             }
             setCount(orderCount);
             let storage = JSON.parse(localStorage.getItem('orders'));
@@ -221,7 +229,7 @@ const Basket = props => {
                     <Typography sx={{display: 'flex', alignItems: 'center'}}
                                 variant="h5"><PersianNumber number={totalPrice}/>&nbsp; تومان </Typography>
                 </Box>
-                <Button disabled={data.length === 0} onClick={e => navigate(PATHS.FINAL_PURCHASE)}
+                <Button disabled={data.length === 0} onClick={e => handleBasket()}
                         sx={{padding: '.8rem 1.9rem', fontSize: '1rem'}}
                         color="success" variant="contained"> نهایی کردن
                     سبدخرید </Button>

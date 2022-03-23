@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {Component, useEffect, useState, useRef} from 'react';
 import {Helmet} from 'react-helmet';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -78,6 +78,11 @@ const Purchase = props => {
     const [countOrder, setCountOrder] = useState(1);
     const [open, setOpen] = React.useState(false);
     const [mainImage, setMainImage] = useState('');
+    const inputElement = useRef();
+
+    const inputFocus = () => {
+        inputElement.current.focus();
+    };
 
 
     const handleOpen = (image) => {
@@ -104,6 +109,7 @@ const Purchase = props => {
 
         if (countOrder === null || countOrder === '' || countOrder === undefined) {
             toast.warning('لطفا تعداد را وارد کنید');
+            inputFocus();
             return;
         }
 
@@ -185,6 +191,7 @@ const Purchase = props => {
                                            }}
                                            onChange={e => handleChangeCount(e, +item.count)}
                                            disabled={+item.count === 0}
+                                           inputRef={inputElement}
                                 />
                                 <Button onClick={handleAddOrder} endIcon={<AddCircleIcon/>}
                                         sx={{width: '200px', height: '46px'}}
