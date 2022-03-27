@@ -3,8 +3,6 @@ storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('ord
 
 let initialState = storage.length;
 
-console.log(initialState)
-
 const OrdersReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'ORDERS_INCREMENT':

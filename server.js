@@ -21,7 +21,7 @@ const AUTH_JWT_OPTIONS = {expiresIn: 1000000};
 const DB = JSON.parse(fs.readFileSync(path.join(__dirname, './db.json'), 'utf-8'));
 
 server.use(cors({
-    origin: true,
+    origin: '*',
     credentials: true,
     preflightContinue: false,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',

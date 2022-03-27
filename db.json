@@ -51,7 +51,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "1500",
-      "count": 31,
+      "count": "2000",
       "createdAt": 1644278583056,
       "description": "test",
       "category": {
@@ -271,7 +271,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "15200",
-      "count": 22,
+      "count": "2000",
       "createdAt": 1644279916623,
       "description": "test",
       "category": {
@@ -371,7 +371,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "300",
-      "count": 256,
+      "count": 161,
       "createdAt": 1644280385236,
       "description": "test",
       "category": {
@@ -461,15 +461,12 @@
       "firstName": "test",
       "brand": "3samsung2",
       "image": [
-        "0cfb2a8ec29f1adb2e2ce9f5b6375a68",
-        "ac91b3467614aa814e23b0bb643d6e02",
-        "f875dd5a9aed5165ca1e914ec626fef5",
-        "9b47f9cfacd9a6cd3d982c32896aa4a9"
+        "0cfb2a8ec29f1adb2e2ce9f5b6375a68"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "60",
       "count": "40",
-      "createdAt": 1645636269333,
+      "createdAt": 1648310380644,
       "description": "<p>test</p>",
       "category": {
         "name": "لپتاپ",
@@ -502,7 +499,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "13000000",
-      "count": 2,
+      "count": 1,
       "createdAt": 1646585480146,
       "description": "<h2>خوبه</h2>",
       "category": {

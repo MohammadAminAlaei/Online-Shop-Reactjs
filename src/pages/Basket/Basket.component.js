@@ -1,9 +1,6 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Helmet} from 'react-helmet';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import Box from '@mui/material/Box';
-import {makeStyles} from '@mui/styles';
 import {useNavigate, useParams} from 'react-router-dom';
 import http from 'services/http.service';
 import {PRODUCTS} from '../../configs/url.config';
@@ -48,7 +45,7 @@ const columns = [
     },
     {
         id: 'editeCount',
-        label: 'تغییر تعداد',
+        label: '',
         format: (value) => value.toLocaleString('fa-IR'),
     },
     {
@@ -85,9 +82,9 @@ const Basket = props => {
 
     const [data, setData] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(1);
     const [open, setOpen] = React.useState(false);
-    const [index, setIndex] = useState(null);
+    const [index, setIndex] = useState(0);
     const handleClose = () => {
         setIndex(null);
         setOpen(false)
@@ -107,12 +104,12 @@ const Basket = props => {
         let storage = JSON.parse(localStorage.getItem('orders'));
         storage === null ? storage = [] : storage = JSON.parse(localStorage.getItem('orders'));
         localStorage.setItem('orders', JSON.stringify(storage));
-        console.log(index)
 
-        setData(storage);
+        setData(storage)
 
         setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
     }
+
 
     const navigate = useNavigate();
 
@@ -128,6 +125,7 @@ const Basket = props => {
         let storage = JSON.parse(localStorage.getItem('orders'));
         storage.splice(index, 1);
         localStorage.setItem('orders', JSON.stringify(storage));
+        console.log(storage)
         setData(storage);
         setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
         store.dispatch({type: 'ORDERS_DECREMENT'});
@@ -140,7 +138,7 @@ const Basket = props => {
             e.preventDefault();
         } else if (e.target.value.length < 2 && e.key === 'Backspace') {
             e.preventDefault();
-        } else if (e.target.value.length === 0 && e.key === '0' || e.key === '.') {
+        } else if (!e.target.value.length === 0 && e.key === '0' || e.key === '.') {
             e.preventDefault();
         }
     };
@@ -155,6 +153,11 @@ const Basket = props => {
                 toast.warning('تعداد نمیتواند خالی یا صفر باشد!');
             }
             setCount(orderCount);
+
+            // let updated = [...data];
+            // updated[index].count = +e.target.value;
+            // setData(updated);
+
             let storage = JSON.parse(localStorage.getItem('orders'));
             storage[index].count = +e.target.value;
             storage[index].totalAmount = storage[index].price * storage[index].count;
@@ -163,6 +166,28 @@ const Basket = props => {
             setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
         });
     };
+
+    const handlePlusOrMines = (target, index) => {
+        let storage = JSON.parse(localStorage.getItem('orders'));
+        if (target === 'plus') {
+            storage[index].count++;
+            storage[index].totalAmount = storage[index].price * storage[index].count;
+            localStorage.setItem('orders', JSON.stringify(storage));
+            setData(storage);
+            setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
+        } else if (target === 'mines') {
+            if (storage[index].count === 1) {
+                toast.warning('تعداد نمیتواند کمتر از 1 باشد!');
+                return;
+            }
+            storage[index].count--;
+            storage[index].totalAmount = storage[index].price * storage[index].count;
+            localStorage.setItem('orders', JSON.stringify(storage));
+            setData(storage);
+            setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
+        }
+    };
+
 
     return (
         <>
@@ -213,28 +238,45 @@ const Basket = props => {
                                         <PersianNumber number={item.count * item.price}/>
                                     </TableCell>
                                     <TableCell>
-                                        <TextField size="small" sx={{width: '100px'}}
-                                                   type="number"
-                                                   id="outlined-basic"
-                                                   label="تعداد"
-                                                   variant="outlined"
-                                                   InputProps={{
-                                                       inputProps: {
-                                                           min: 1, max: count !== 0 ? count : 100,
-                                                           onKeyPress: handleChange
-                                                       },
-                                                   }}
-                                                   defaultValue={item.count}
-                                                   onChange={e => handleChangeCount(e, +item.count, item.orderId, index)}
-                                        />
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '1px'
+                                            }}>
+                                            <Button variant="contained" color="info"
+                                                    sx={{minWidth: '40px', height: '40px'}}
+                                                    onClick={e => handlePlusOrMines('plus', index)}>
+                                                +
+                                            </Button>
+                                            <TextField
+                                                size="small" sx={{width: '80px'}}
+                                                type="number"
+                                                id="outlined-basic"
+                                                label="تغیر تعداد"
+                                                variant="outlined"
+                                                InputProps={{
+                                                    inputProps: {
+                                                        min: 1, max: count !== 0 ? count : 100,
+                                                        onKeyPress: handleChange
+                                                    },
+                                                }}
+                                                value={item.count}
+                                                onChange={e => handleChangeCount(e, +item.count, item.orderId, index)}
+                                            />
+                                            <Button variant="contained" color="info"
+                                                    sx={{minWidth: '40px', height: '40px'}}
+                                                    onClick={e => handlePlusOrMines('mines', index)}>
+                                                -
+                                            </Button>
+                                        </Box>
                                     </TableCell>
                                     <TableCell key={item.key}>
                                         <Box sx={{display: 'flex', gap: '10px'}}>
                                             <Button onClick={e => handleOpen(index)} color="warning"
                                                     variant="contained"> حذف </Button>
                                         </Box>
-                                        <div>
-                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))}
