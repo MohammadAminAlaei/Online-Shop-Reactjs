@@ -11,7 +11,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "630",
-      "count": "0",
+      "count": 3,
       "createdAt": 1644277786965,
       "description": "test",
       "category": {
@@ -51,7 +51,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "1500",
-      "count": "2000",
+      "count": 1999,
       "createdAt": 1644278583056,
       "description": "test",
       "category": {
@@ -465,7 +465,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "60",
-      "count": "40",
+      "count": 38,
       "createdAt": 1648310380644,
       "description": "<p>test</p>",
       "category": {
@@ -499,7 +499,7 @@
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "13000000",
-      "count": 1,
+      "count": 0,
       "createdAt": 1646585480146,
       "description": "<h2>خوبه</h2>",
       "category": {
@@ -1368,7 +1368,7 @@
     {
       "name": "محمد امین  اعلایی",
       "date": "1401/01/03",
-      "status": "done",
+      "status": "doing",
       "address": "تهران - انقلاب",
       "totalAmount": 33100,
       "orders": [
@@ -1398,7 +1398,7 @@
     {
       "name": "محمد امین  اعلایی",
       "date": "1401/01/03",
-      "status": "doing",
+      "status": "done",
       "address": "تهران",
       "totalAmount": 94400,
       "orders": [

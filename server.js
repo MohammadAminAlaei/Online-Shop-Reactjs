@@ -10,6 +10,7 @@ const upload = multer({dest: 'uploads/'});
 const jwt = require('jsonwebtoken');
 const AUTH_JWT_SECRET = 'TOP-SECRET';
 const AUTH_JWT_OPTIONS = {expiresIn: 1000000};
+const auth = require("json-server-auth");
 
 // TODO: vaghti token nis, 200 mide
 // TODO: vaghti token nist, invalid nade (login api)
@@ -17,7 +18,9 @@ const AUTH_JWT_OPTIONS = {expiresIn: 1000000};
 // TODO: Handle 404 error message
 // TODO: Refactor refresh token mechanism
 
+
 // Load DB file for Authentication middleware and endpoints
+server.use(auth);
 const DB = JSON.parse(fs.readFileSync(path.join(__dirname, './db.json'), 'utf-8'));
 
 server.use(cors({
@@ -29,6 +32,16 @@ server.use(cors({
 
 server.options('*', cors());
 
+// Cors
+
+server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'authorization');
+    res.header('Access-Control-Request-Headers', 'authorization');
+    res.header('Access-Control-Allow-Methods', 'GET');
+    res.header('Access-Control-Request-Methods', 'GET');
+    next();
+})
 
 // Authorization Middleware
 server.use((req, res, next) => {
@@ -92,6 +105,13 @@ server.use(jsonServer.bodyParser);
 const imageFieldUploadMiddleware = upload.single('image');
 
 server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'authorization');
+    res.header('Access-Control-Request-Headers', 'authorization');
+    res.header('Access-Control-Allow-Methods', 'GET');
+    res.header('Access-Control-Request-Methods', 'GET');
+    res.header('Access-Control-Allow-Methods', 'PATCH');
+    res.header('Access-Control-Request-Methods', 'PATCH');
     if ((req.method === 'POST' || req.method === 'PATCH') && req.headers['content-type'] !== 'application/json') {
         imageFieldUploadMiddleware(req, res, next);
     } else {
@@ -146,7 +166,7 @@ server.post([
     }
     const {username, role, name} = req.user;
     jwt.sign({username, role, name}, AUTH_JWT_SECRET, AUTH_JWT_OPTIONS, (err, token) => {
-        if (err) return next(error);
+        if (err) return next(err);
         res.json({token});
     });
 });

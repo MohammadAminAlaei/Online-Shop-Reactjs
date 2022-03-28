@@ -167,25 +167,31 @@ const Basket = props => {
         });
     };
 
-    const handlePlusOrMines = (target, index) => {
-        let storage = JSON.parse(localStorage.getItem('orders'));
-        if (target === 'plus') {
-            storage[index].count++;
-            storage[index].totalAmount = storage[index].price * storage[index].count;
-            localStorage.setItem('orders', JSON.stringify(storage));
-            setData(storage);
-            setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
-        } else if (target === 'mines') {
-            if (storage[index].count === 1) {
-                toast.warning('تعداد نمیتواند کمتر از 1 باشد!');
+    const handlePlusOrMines = (e, target, index, orderId) => {
+        http.get(PRODUCTS + '/' + orderId).then(res => {
+            let storage = JSON.parse(localStorage.getItem('orders'));
+            if (target === 'plus' && storage[index].count + 1 > res.data.count) {
+                toast.warning(`حداکثر تعداد موجود در انبار ${res.data.count} است`);
                 return;
             }
-            storage[index].count--;
-            storage[index].totalAmount = storage[index].price * storage[index].count;
-            localStorage.setItem('orders', JSON.stringify(storage));
-            setData(storage);
-            setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
-        }
+            if (target === 'plus') {
+                storage[index].count++;
+                storage[index].totalAmount = storage[index].price * storage[index].count;
+                localStorage.setItem('orders', JSON.stringify(storage));
+                setData(storage);
+                setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
+            } else if (target === 'mines') {
+                if (storage[index].count === 1) {
+                    toast.warning('تعداد نمیتواند کمتر از 1 باشد!');
+                    return;
+                }
+                storage[index].count--;
+                storage[index].totalAmount = storage[index].price * storage[index].count;
+                localStorage.setItem('orders', JSON.stringify(storage));
+                setData(storage);
+                setTotalPrice(storage.reduce((total, item) => total + item.price * item.count, 0));
+            }
+        })
     };
 
 
@@ -247,7 +253,7 @@ const Basket = props => {
                                             }}>
                                             <Button variant="contained" color="info"
                                                     sx={{minWidth: '40px', height: '40px'}}
-                                                    onClick={e => handlePlusOrMines('plus', index)}>
+                                                    onClick={e => handlePlusOrMines(e, 'plus', index, item.orderId)}>
                                                 +
                                             </Button>
                                             <TextField
@@ -267,7 +273,7 @@ const Basket = props => {
                                             />
                                             <Button variant="contained" color="info"
                                                     sx={{minWidth: '40px', height: '40px'}}
-                                                    onClick={e => handlePlusOrMines('mines', index)}>
+                                                    onClick={e => handlePlusOrMines(e, 'mines', index, item.orderId)}>
                                                 -
                                             </Button>
                                         </Box>

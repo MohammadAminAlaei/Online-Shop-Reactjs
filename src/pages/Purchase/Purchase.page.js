@@ -113,7 +113,6 @@ const Purchase = props => {
                 return;
             }
 
-
             const order = {
                 count: countOrder,
                 name: data[0].firstName,
@@ -127,11 +126,11 @@ const Purchase = props => {
             store.dispatch({type: 'ORDERS_INCREMENT'});
             toast.success('کالا با موفقیت به سبد خرید اضافه شد.');
 
-            http.patch(`${PRODUCTS}/${id}`, {
-                count: data[0].count - countOrder
-            }).then(res => {
-                setData([...data, res.data]);
-            });
+            // http.patch(`${PRODUCTS}/${id}`, {
+            //     count: data[0].count - countOrder
+            // }).then(res => {
+            //     setData([...data, res.data]);
+            // });
         }
 
         const handleChange = e => {
@@ -154,15 +153,16 @@ const Purchase = props => {
             }
         };
 
-        const handlePlusOrMines = (e, target) => {
-            if (target === 'plus') {
+        const handlePlusOrMines = (e, target, count) => {
+            if (target === 'plus' && countOrder + 1 > count) {
+                setCountOrder(count)
+            } else if (target === 'plus') {
                 setCountOrder(countOrder + 1);
             } else if (target === 'mines') {
                 if (countOrder - 1 === 0 || countOrder - 1 < 0) {
                     e.preventDefault();
                 } else {
                     setCountOrder(countOrder - 1);
-
                 }
             }
         };
@@ -198,7 +198,8 @@ const Purchase = props => {
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: '2px'}}>
                                         <Button variant="contained" color="info"
                                                 sx={{minWidth: '40px', height: '40px'}}
-                                                onClick={e => handlePlusOrMines(e, 'plus')}>
+                                                onClick={e => handlePlusOrMines(e, 'plus', item.count)}
+                                                disabled={+item.count < 1}>
                                             +
                                         </Button>
                                         <TextField value={countOrder} size="small" sx={{width: '100px'}} type="number"
@@ -212,12 +213,13 @@ const Purchase = props => {
                                                        },
                                                    }}
                                                    onChange={e => handleChangeCount(e, +item.count)}
-                                                   disabled={+item.count === 0}
+                                                   disabled={+item.count < 1}
                                                    inputRef={inputElement}
                                         />
                                         <Button variant="contained" color="info"
                                                 sx={{minWidth: '40px', height: '40px'}}
-                                                onClick={e => handlePlusOrMines(e, 'mines')}>
+                                                onClick={e => handlePlusOrMines(e, 'mines', item.count)}
+                                                disabled={+item.count < 1}>
                                             -
                                         </Button>
                                     </Box>
@@ -225,7 +227,7 @@ const Purchase = props => {
                                             sx={{width: '200px', height: '46px'}}
                                             variant="contained"
                                             color="success"
-                                            disabled={+item.count === 0}> افزودن
+                                            disabled={+item.count < 1}> افزودن
                                         به سبد
                                         خرید </Button>
                                 </Box>

@@ -16,6 +16,7 @@ class HttpService {
 
         axios.interceptors.request.use((config) => {
             // console.log('CONFIG: ', config);
+            config.headers['Access-Control-Allow-Origin'] = '*';
             let token = localStorage.getItem(config.url !== REFRESH_TOKEN_URL ? ACCESS_TOKEN : REFRESH_TOKEN);
             if (config.url !== LOGIN && (config.url === WHOAMI || token)) {
                 config.headers['token'] = `${token}`
