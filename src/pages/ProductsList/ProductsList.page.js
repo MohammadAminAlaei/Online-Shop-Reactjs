@@ -15,6 +15,8 @@ import SelectUnstyled, {selectUnstyledClasses} from '@mui/base/SelectUnstyled';
 import OptionUnstyled, {optionUnstyledClasses} from '@mui/base/OptionUnstyled';
 import PopperUnstyled from '@mui/base/PopperUnstyled';
 import {styled} from '@mui/system';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 const blue = {
     100: '#DAECFF',
@@ -170,6 +172,7 @@ const useStyle = makeStyles(theme => ({
         justifyContent: 'flex-start',
         textAlign: 'right',
         zIndex: 99,
+        direction: 'ltr',
         [theme.breakpoints.down('sm')]: {
             maxHeight: 'max-content!important',
         }
@@ -177,9 +180,19 @@ const useStyle = makeStyles(theme => ({
     sidebarButton: {
         lineHeight: '2rem!important',
         fontSize: '1rem!important',
+        direction: 'rtl',
     },
     orderBox: {
         marginTop: '-20px'
+    },
+    menuIcon: {
+        cursor: 'pointer',
+        fontSize: '2rem!important',
+    },
+    sidebarIcon: {
+        display: 'block',
+        textAlign: 'left',
+        margin: '9px 0 -12px 0',
     }
 
 }));
@@ -195,6 +208,7 @@ const ProductsList = () => {
     const [toggleMenu, setToggleMenu] = useState(true);
     const [background, setBackground] = useState('گوشی موبایل');
     const [value, setValue] = useState('');
+    const [menuIcon, setMenuIcon] = useState(false);
 
     const location = useLocation()
     console.log(location);
@@ -225,7 +239,9 @@ const ProductsList = () => {
                 <title>فروشگاه مکتب | لیست محصولات </title>
             </Helmet>
             <Box className={classes.orderBox}>
-                <Box className={classes.sideBar}>
+                <Box className={classes.sideBar} sx={{display: menuIcon ? 'flex' : 'none'}}>
+                    <CloseOutlinedIcon color="error" onClick={e => setMenuIcon(!menuIcon)}
+                                       className={`${classes.menuIcon} ${classes.sidebarIcon}`}/>
                     <Button style={{background: background === 'گوشی موبایل' ? '#cdc7ff7a' : 'transparent'}}
                             className={classes.sidebarButton}
                             onClick={e => handleCategory('گوشی موبایل')}
@@ -259,6 +275,15 @@ const ProductsList = () => {
                     </CustomSelect>
                 </Box>
                 <Box sx={{paddingTop: '20px'}}>
+                    {
+                        !menuIcon ? (
+                            <MenuOutlinedIcon color="primary" onClick={e => setMenuIcon(!menuIcon)}
+                                              className={classes.menuIcon}/>
+                        ) : (
+                            <CloseOutlinedIcon color="error" onClick={e => setMenuIcon(!menuIcon)}
+                                               className={classes.menuIcon}/>
+                        )
+                    }
                     <Typography variant="h5" sx={{my: 3}}> کالاهای گروه {group}</Typography>
                     <Grid container spacing={{xs: 2, md: 4}}
                           columns={{xs: 12, sm: 8, md: 12}}>
@@ -272,13 +297,6 @@ const ProductsList = () => {
                                     />
                                 </Grid>
                             )) :
-                            //     (skeletonNumber.map((item, index) => (
-                            //         <Grid item xs={12} sm={4} md={4} key={index}>
-                            //             <Skeleton key={item} animation="wave" variant="rect" width={'300px'}
-                            //                       height={'250px'}/>
-                            //         </Grid>
-                            //     ))
-                            // )
                             (
                                 <Typography sx={{padding: '1.7rem', marginTop: '20px', fontFamily: 'Vazir-bold'}}
                                             variant="h5"> کالاهای مورد
