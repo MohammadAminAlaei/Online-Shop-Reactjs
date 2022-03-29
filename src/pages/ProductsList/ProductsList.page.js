@@ -205,9 +205,7 @@ const ProductsList = () => {
     const [page, setPage] = useState(1);
     const [numberOfPages, setNumberOfPages] = useState(10);
     const [filter, setFilter] = useState('');
-    const [toggleMenu, setToggleMenu] = useState(true);
     const [background, setBackground] = useState('گوشی موبایل');
-    const [value, setValue] = useState('');
     const [menuIcon, setMenuIcon] = useState(false);
 
     const location = useLocation()
@@ -228,8 +226,6 @@ const ProductsList = () => {
         navigate(`/product-list/${category}`);
         setBackground(category);
     }
-
-    const skeletonNumber = [1, 2, 3, 4, 5, 6];
 
     const classes = useStyle()
 
