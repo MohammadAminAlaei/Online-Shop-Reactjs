@@ -1,5 +1,7 @@
 # Final-Project-Maktab-Sharif
 
+created with React js and Redux with back and json-server
+
 Getting Started with Create React App
 This project was Material UI with Create React App.
 
