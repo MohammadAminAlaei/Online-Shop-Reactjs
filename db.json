@@ -10,7 +10,7 @@
         "658b403da7012581a05a01f5968703bd"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "630",
+      "price": "400",
       "count": 3,
       "createdAt": 1644277786965,
       "description": "test",
@@ -30,7 +30,7 @@
         "db8ff5a21863437fef0c5d5dcf2dd1c1"
       ],
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
-      "price": "140",
+      "price": "200",
       "count": "1300",
       "createdAt": 1644278521213,
       "description": "test",
@@ -509,7 +509,7 @@
       "id": 33
     },
     {
-      "firstName": "new",
+      "firstName": "iphone X",
       "brand": "samsung",
       "image": [
         "2e83dada79d430a691c8b1173202db4f",
@@ -518,7 +518,7 @@
       "thumbnail": "65ddd8b1bbce4d8396b62611147fa1d6",
       "price": "800",
       "count": 470,
-      "createdAt": 1646671056131,
+      "createdAt": 1650516833592,
       "description": "<h2>test</h2>",
       "category": {
         "name": "گوشی موبایل",

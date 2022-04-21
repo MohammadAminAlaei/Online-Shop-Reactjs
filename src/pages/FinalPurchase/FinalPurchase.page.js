@@ -59,7 +59,7 @@ const validationSchema = yup.object({
                 message: 'شماره تلفن صحیح نیست',
                 excludeEmptyString: false,
             })
-            .required('آدرس یکی از فیلد های الزامی است'),
+            .required('شماره تلفن یکی از فیلد های الزامی است'),
         date: yup.date().nullable()
     }
 );
